@@ -3,7 +3,7 @@
 <div class="container">
   <div class="row align-items-center">
 
-    <div class="col-sm-2">
+    <div class="col-sm-1">
       <a class="navbar" href="{% url 'forms:index' %}">
         <img src="{% static 'img/mcko_logo_250_250.png' %}"
              width="100"
@@ -23,7 +23,7 @@
 
     <div class="col text-end">
       {% if user.is_authenticated %}
-        <h3 class="card-title">{{ user }}</h3>
+        <h3 class="card-title">{{ user.first_name }} {{ user.last_name }}</h3>
         <a href="{% url 'users:logout' %}" style="font-weight: bold; font-size: large">
           Выйти
         </a>
