@@ -14,6 +14,7 @@ class RegForm(models.Model):
 
     deal_id = models.IntegerField(
         db_index=True,
+        unique=True,
         verbose_name='ID мероприятия',
         help_text='Введите ID мероприятия'
     )

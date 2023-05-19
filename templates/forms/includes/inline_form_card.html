@@ -1,0 +1,23 @@
+{% load static %}
+
+<div class="row main-row">
+  <div class="col-12 align-center">
+    <div class="row p-3">
+      <div class="col-1 align-middle">
+        ID:<br><b>{{ card.deal_id }}</b>
+      </div>
+      <div class="col-6">
+        Название:<br><b>{{ card.title }}</b>
+      </div>
+      <div class="col-2">
+        Создал:<br><b>{{ card.author.first_name }} {{ card.author.last_name }}</b>
+      </div>
+      <div class="col-2">
+        Дата создания:<br><b>{{ card.pub_date }}</b>
+      </div>
+      <div class="col-1 d-grid gap-2 d-md-flex justify-content-md-end">
+        <button type="button" class="btn btn-secondary btn-block">Открыть</button>
+      </div>
+    </div>
+  </div>
+</div>

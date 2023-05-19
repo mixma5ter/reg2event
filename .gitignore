@@ -148,3 +148,7 @@ dmypy.json
 # папки со датой и медиа
 media/
 data/
+
+# migrations
+*/migrations/*
+!__init__.*

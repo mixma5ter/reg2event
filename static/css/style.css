@@ -52,18 +52,18 @@ main {
 }
 
 input[type="number"] {
-	background-color: #fff;
-	vertical-align: top;
-	outline: none;
-	padding: 0;
-	height: 40px;
-	line-height: 40px;
-	text-indent: 10px;
-	display: inline-block;
-	width: auto;
-	box-sizing: border-box;
-	border: 2px solid #ccc;
-	border-radius: 3px;
+  background-color: #fff;
+  vertical-align: top;
+  outline: none;
+  padding: 0;
+  height: 40px;
+  line-height: 40px;
+  text-indent: 10px;
+  display: inline-block;
+  width: auto;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 3px;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -74,60 +74,92 @@ input[type="number"]::-webkit-outer-spin-button {
 
 input[type="number"]:focus {
   outline: none;
-	border: 2px solid grey;
+  border: 2px solid grey;
 }
 
 .form-outline input[type='text'],
-    .form-outline input[type='email'],
-    .form-outline select,
-    .form-outline textarea {
-      width: 100%;
-      border: none;
-      background-color: #e8e8e8;
-      padding: .375rem .75rem;
-      margin-bottom: 1rem;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
+.form-outline input[type='email'],
+.form-outline select,
+.form-outline textarea {
+  width: 100%;
+  border: none;
+  background-color: #e8e8e8;
+  padding: .375rem .75rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
 
 .cards_container {
- display: flex;
- flex-wrap: wrap;
- justify-content: space-between;
- margin: 20px auto;
- max-width: 1200px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 20px auto;
+  max-width: 1200px;
 }
 
 .card {
- width: 30%;
- background-color: #e8e8e8;
- box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
- margin-bottom: 30px;
- border-radius: 5px;
- padding: 20px;
- position: relative;
- cursor: pointer;
- transition: transform 0.3s ease-in-out;
+  width: 30%;
+  background-color: #e8e8e8;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 30px;
+  border-radius: 5px;
+  padding: 20px;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
 }
 
 .card:hover {
- transform: translateY(-5px);
- box-shadow: 0px 5px 10px rgba(0,0,0,0.3);
+  transform: translateY(-5px);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
 }
 
 .card__title {
- font-size: 24px;
- color: #333;
- margin-bottom: 10px;
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
 }
 
 .card__author {
- font-size: 16px;
- color: #666;
- margin-bottom: 5px;
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 5px;
 }
 
 .card__date {
- font-size: 14px;
- color: #999;
+  font-size: 14px;
+  color: #999;
+}
+
+.row.main-row {
+  background-color: #ddd;
+  margin: 10px;
+}
+
+.row.main-row .btn {
+  color: #333;
+  background-color: #fff;
+}
+
+.row.main-row .btn:hover {
+  color: #fff;
+  background-color: #6b747d;
+}
+
+.pagination .page-item .page-link {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+}
+
+.pagination .page-item.active .page-link {
+  color: #333;
+  background-color: #ddd;
+  border-color: #ddd;
+}
+
+.pagination .page-link:hover {
+  color: #fff;
+  background-color: #6b747d;
 }

@@ -1,20 +1,34 @@
-from django.shortcuts import render, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView, ListView
 
+from core.paginator import paginator
 from .models import RegForm
 
-CARDS_ON_PAGE = 6
+CARDS_ON_INDEX_PAGE = 6
 
 
-class IndexView(ListView):
+class IsUserAuthorized(LoginRequiredMixin):
+    """Проверка авторизации пользователя."""
+
+    class Meta:
+        login_url = 'login'
+
+        def dispatch(self, request, *args, **kwargs):
+            if not request.user.is_authenticated:
+                return self.handle_no_permission()
+            return super().dispatch(request, *args, **kwargs)
+
+
+class IndexView(IsUserAuthorized, ListView):
     """Главная страница."""
 
+    model = RegForm
     template_name = 'forms/index.html'
     context_object_name = 'forms'
     title = 'Регистрация обращений'
 
     def get_queryset(self):
-        cards = RegForm.objects.all().order_by('-pub_date')[:CARDS_ON_PAGE]
+        cards = RegForm.objects.all().order_by('-pub_date')[:CARDS_ON_INDEX_PAGE]
         return cards
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -22,4 +36,23 @@ class IndexView(ListView):
         context['user'] = self.request.user
         context['title'] = self.title
         context['cards'] = self.get_queryset()
+        return context
+
+
+class FormsListView(IsUserAuthorized, ListView):
+    """Страница со списком форм регистрации."""
+
+    model = RegForm
+    template_name = 'forms/forms_list.html'
+    context_object_name = 'forms'
+    title = 'Список форм'
+
+    def get_queryset(self):
+        return RegForm.objects.all().order_by('-pub_date')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.request.user
+        context['title'] = self.title
+        context['page_obj'] = paginator(self.request, self.get_queryset())
         return context
