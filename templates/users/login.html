@@ -1,14 +1,12 @@
 <!-- templates/users/login.html -->
-{% extends "base.html" %}
+{% extends "empty.html" %}
 
-{% block title %}Войти{% endblock %}
+{% block title %}Вход{% endblock %}
 
 {% block content %}
-  <div class="container py-4">
-    <h1 class="text-center">Войти на сайт</h1>
-  </div>
-
-  <div class="d-grid col-3 mx-auto">
-    {% include 'users/includes/form.html' %}
-  </div>
+  <body class="text-center form-signin">
+    <main>
+      {% include 'users/includes/form.html' %}
+    </main>
+  </body>
 {% endblock %}

@@ -1,9 +1,13 @@
 <!-- templates/users/includes/form.html -->
+{% load static %}
+
 <form method="post"
   {% if action_url %}
       action="{% url action_url %}"
   {% endif %}
   >
+  <img class="mb-2" src="{% static 'img/mcko_logo_250_250.png' %}" alt="" width="100" height="100">
+
   {% csrf_token %}
 
   {% load user_filters %}
@@ -21,9 +25,6 @@
       >
       <label for="{{ field.id_for_label }}">
           {{ field.label }}
-          {% if field.field.required %}
-              <span class="required text-danger">*</span>
-          {% endif %}
       </label>
       <div>
           {# К полю ввода добавляем атрибут class #}

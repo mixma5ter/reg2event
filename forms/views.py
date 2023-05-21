@@ -25,7 +25,7 @@ class IndexView(IsUserAuthorized, ListView):
     model = RegForm
     template_name = 'forms/index.html'
     context_object_name = 'forms'
-    title = 'Регистрация обращений'
+    title = 'Формы регистраций'
 
     def get_queryset(self):
         cards = RegForm.objects.all().order_by('-pub_date')[:CARDS_ON_INDEX_PAGE]
@@ -45,7 +45,7 @@ class FormsListView(IsUserAuthorized, ListView):
     model = RegForm
     template_name = 'forms/forms_list.html'
     context_object_name = 'forms'
-    title = 'Список форм'
+    title = 'Формы регистраций'
 
     def get_queryset(self):
         return RegForm.objects.all().order_by('-pub_date')

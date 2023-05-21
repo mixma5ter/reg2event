@@ -5,18 +5,25 @@
 
 {% block content %}
 
-<div class="container py-4">
-  <h1 class="text-center">{{ title }}</h1>
+<div class="container py-4 mt-3">
+  <h1 class="text-start">{{ title|upper }}</h1>
 </div>
 
-<div class="container">
+<div class="container py-2">
+  <a href="{% url 'forms:index' %}" class="col-4 me-4 btn btn-lg btn-outline-primary">
+    Главная
+  </a>
+  <a href="#" class="col-4 me-4 btn btn-lg btn-outline-primary">
+    Создать
+  </a>
+</div>
 
+<div class="container pb-3">
   {% for card in page_obj %}
     {% include "forms/includes/inline_form_card.html" %}
   {% endfor %}
 
   {% include 'forms/includes/paginator.html' %}
-
 </div>
 
 {% endblock %}
