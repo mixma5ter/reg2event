@@ -23,13 +23,12 @@ class FormAdmin(MyAdmin):
         'deal_id',
         'author',
         'title',
-        'event_date',
         'pub_date',
         'update_date',
     )
     list_display_links = ('deal_id', 'title',)
     search_fields = ('deal_id', 'title',)
-    list_filter = ('author', 'event_date',)
+    list_filter = ('author',)
 
 
 @admin.register(Field)

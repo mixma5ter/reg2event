@@ -1,4 +1,3 @@
-<!-- templates/forms/forms_list.html -->
 {% extends 'base.html' %}
 
 {% block title %}{{ title }}{% endblock %}
@@ -13,14 +12,14 @@
   <a href="{% url 'forms:index' %}" class="col-4 me-4 btn btn-lg btn-outline-primary">
     Главная
   </a>
-  <a href="#" class="col-4 me-4 btn btn-lg btn-outline-primary">
+  <a href="{% url 'forms:form_create' %}" class="col-4 me-4 btn btn-lg btn-outline-primary">
     Создать
   </a>
 </div>
 
-<div class="container pb-3">
+<div class="container py-4">
   {% for card in page_obj %}
-    {% include "forms/includes/inline_form_card.html" %}
+  {% include "forms/includes/inline_form_card.html" %}
   {% endfor %}
 
   {% include 'forms/includes/paginator.html' %}

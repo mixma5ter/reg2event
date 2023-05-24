@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+<div class="container py-4 mt-3">
+  <h1 class="text-start">{{ title|upper }}</h1>
+</div>
+
+<div class="container py-2">
+  <a href="{% url 'forms:index' %}" class="col-4 me-4 btn btn-lg btn-outline-primary">
+    Главная
+  </a>
+  <a href="{% url 'forms:forms_list' %}" class="col-4 me-4 btn btn-lg btn-outline-primary">
+    Все формы
+  </a>
+</div>
+
+<div class="container py-4">
+  {% if form.errors %}
+  <div class="alert alert-danger">
+    {% for field, errors in form.errors.items %}
+    {% for error in errors %}
+    {{ error }}<br>
+    {% endfor %}
+    {% endfor %}
+  </div>
+  {% endif %}
+  <form method="post" class="form-container">
+    {% csrf_token %}
+    <div class="form-field">
+      {{ form.deal_id.label_tag }}
+      {{ form.deal_id }}
+    </div>
+    <div class="form-field">
+      {{ form.title.label_tag }}
+      {{ form.title }}
+    </div>
+
+    <hr class="form-field">
+
+    <div class="form-field form-field-checkbox">
+      <label for="id_name">ФИО:</label>
+      <input class="form-check-input" type="checkbox" name="field-text-ФИО" id="id_name" checked>
+    </div>
+    <hr class="form-field">
+
+    <div class="form-field form-field-checkbox">
+      <label for="field-id_organization">Организация:</label>
+      <input class="form-check-input" type="checkbox" name="field-text-Организация"
+             id="field-id_organization">
+    </div>
+    <hr class="form-field">
+
+    <div class="form-field form-field-checkbox">
+      <label for="id_employment">Должность:</label>
+      <input class="form-check-input" type="checkbox" name="field-text-Должность"
+             id="id_employment">
+    </div>
+    <hr class="form-field">
+
+    <div class="form-field form-field-checkbox">
+      <label for="id_email">Почта:</label>
+      <input class="form-check-input" type="checkbox" name="field-email-Почта" id="id_email">
+    </div>
+    <hr class="form-field">
+
+    <div class="form-field form-field-checkbox">
+      <label for="id_phone">Телефон:</label>
+      <input class="form-check-input" type="checkbox" name="field-phone-Телефон" id="id_phone">
+    </div>
+    <hr class="form-field">
+
+    <div class="form-field form-field-checkbox">
+      <label for="id_comment">Комментарий:</label>
+      <input class="form-check-input" type="checkbox" name="field-textarea-Комментарий"
+             id="id_comment">
+    </div>
+    <hr class="form-field">
+
+    <div id="fields"></div>
+    <button type="button" class="col-4 me-4 btn btn-lg btn-outline-primary" id="add-field">Добавить
+      поле
+    </button>
+    <button type="submit" class="col-4 me-4 btn btn-lg btn-outline-primary">Создать</button>
+
+  </form>
+</div>
+
+<script type="text/javascript" src="{% static 'js/includes/add_field.js' %}"></script>
+
+{% endblock %}

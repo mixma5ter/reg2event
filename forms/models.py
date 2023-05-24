@@ -31,10 +31,6 @@ class Form(CreatedModel):
         verbose_name='Название мероприятия',
         help_text='Введите название мероприятия',
     )
-    event_date = models.DateField(
-        verbose_name='Дата мероприятия',
-        help_text='Выберите дату мероприятия',
-    )
 
     class Meta:
         ordering = ('-pub_date',)
@@ -50,6 +46,7 @@ class Field(CreatedModel):
 
     FIELD_TYPE_CHOICES = [
         ('text', 'Text'),
+        ('textarea', 'Textarea'),
         ('number', 'Number'),
         ('email', 'Email'),
         ('phone', 'Phone'),
@@ -59,15 +56,21 @@ class Field(CreatedModel):
     ]
     label = models.CharField(
         max_length=255,
+        verbose_name='Название поля',
+        help_text='Введите название поля'
     )
     field_type = models.CharField(
         max_length=255,
         choices=FIELD_TYPE_CHOICES,
+        verbose_name='Тип поля',
+        help_text='Выберите название поля'
     )
     form = models.ForeignKey(
         Form,
         on_delete=models.CASCADE,
         related_name='fields',
+        verbose_name='Форма',
+        help_text='Выберите форму'
     )
 
     class Meta:
