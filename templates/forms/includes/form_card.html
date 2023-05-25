@@ -1,5 +1,5 @@
 <div class="card">
-  <a href="{% url 'forms:form_detail' pk=card.id %}">
+  <a href="{% url 'forms:form_update' pk=card.id %}">
     <div class="card-body">
       <div class="card__title">{{ card.title }}</div>
       <div class="card__deal-id">ID: {{ card.deal_id }}</div>

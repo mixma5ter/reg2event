@@ -16,7 +16,7 @@
         Дата создания:<br><b>{{ card.pub_date }}</b>
       </div>
       <div class="col-1 d-flex align-items-center">
-        <a href="{% url 'forms:form_detail' pk=card.id %}" class="btn btn-arrow">
+        <a href="{% url 'forms:form_update' pk=card.id %}" class="btn btn-arrow">
           <svg src="{% static 'img/arrow-right.svg' %}" width="24" height="24" fill="white"
                class="bi bi-arrow-right" viewBox="0 0 16 14">
             <path fill-rule="evenodd"

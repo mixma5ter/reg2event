@@ -18,8 +18,8 @@
 </div>
 
 <div class="container cards_container">
-  {% for card in cards %}
-    {% include "forms/includes/form_card.html" %}
+  {% for card in page_obj %}
+  {% include "forms/includes/form_card.html" %}
   {% endfor %}
 </div>
 

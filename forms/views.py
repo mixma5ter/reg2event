@@ -1,6 +1,5 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView
 
@@ -26,15 +25,14 @@ class IndexView(LoginRequiredMixin, ListView):
     template_name = 'forms/index.html'
     context_object_name = 'forms'
     title = 'Формы регистраций'
+    paginate_by = CARDS_ON_INDEX_PAGE
 
     def get_queryset(self):
-        cards = Form.objects.all().order_by('-pub_date')[:CARDS_ON_INDEX_PAGE]
-        return cards
+        return Form.objects.order_by('-pub_date')  # [:CARDS_ON_INDEX_PAGE]
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = self.title
-        context['cards'] = self.get_queryset()
         return context
 
 
@@ -47,7 +45,7 @@ class FormsListView(LoginRequiredMixin, ListView):
     title = 'Формы регистраций'
 
     def get_queryset(self):
-        return Form.objects.all().order_by('-pub_date')
+        return Form.objects.order_by('-pub_date')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -65,7 +63,7 @@ class FormCreateView(LoginRequiredMixin, CreateView):
     context_object_name = 'form'
     title = 'Новая форма регистрации'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = self.title
         context['basic_fields'] = BASIC_FIELDS
@@ -92,11 +90,8 @@ class FormCreateView(LoginRequiredMixin, CreateView):
         form_id = form.instance.id
 
         # Создаем базовые поля
-        fields = []
-        for field_data in BASIC_FIELDS:
-            label, field_type = list(field_data.items())[0]
-            field = Field(label=label, field_type=field_type, form_id=form_id, is_active=False)
-            fields.append(field)
+        fields = [Field(label=label, field_type=field_type, form_id=form_id, is_active=False) for
+                  field_data in BASIC_FIELDS for label, field_type in field_data.items()]
         Field.objects.bulk_create(fields)
 
         # Получаем поля формы Field из POST-запроса и сохраняем их в БД
@@ -106,7 +101,7 @@ class FormCreateView(LoginRequiredMixin, CreateView):
                 field_data = key.split('-')
                 field = Field.objects.filter(form_id=form_id, label=field_data[2]).first()
                 if field:
-                    field.is_active = True if value == 'on' else False
+                    field.is_active = value == 'on'
                     field.save()
 
             # Получаем кастомные поля
@@ -124,26 +119,26 @@ class FormCreateView(LoginRequiredMixin, CreateView):
                     )
                     field.save()
 
-        success_url = reverse_lazy('forms:form_detail', args=[form_id])
-        return redirect(success_url)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('forms:form_detail', args=[self.object.id])
 
 
-class FormDetailView(LoginRequiredMixin, UpdateView):
+class FormUpdateView(LoginRequiredMixin, UpdateView):
     """Контроллер для просмотра и редактирования формы."""
 
     model = Form
     form_class = FormCreateForm
-    template_name = 'forms/form_detail.html'
+    template_name = 'forms/form_update.html'
     context_object_name = 'form'
-    success_url = reverse_lazy('forms:form_list')
-    title = 'Редактирование формы'
+    title = 'Форма регистрации'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Добавляем id формы в контекст шаблона
-        context['form_id'] = self.object.id
-        context['link'] = self.object.link
         context['title'] = self.title
+        context['link'] = self.object.link
         context['fields'] = self.object.fields.all().order_by('id')
         return context
 
@@ -151,10 +146,9 @@ class FormDetailView(LoginRequiredMixin, UpdateView):
         """Переопределяем метод формы для сохранения изменений связанных полей поля формы."""
 
         self.object = form.save(commit=False)
-        self.object.save()
 
         deal_id = form.cleaned_data['deal_id']
-        form.instance.link = 'http://example.com/api/{}'.format(deal_id)
+        self.object.link = 'http://example.com/api/{}'.format(deal_id)
 
         # Получаем список всех полей формы
         fields = self.object.fields.all()
@@ -162,12 +156,12 @@ class FormDetailView(LoginRequiredMixin, UpdateView):
         # Проходимся по каждому полю и проверяем его статус в форме
         for field in fields:
             field_id = 'field-{}-{}'.format(field.field_type, field.id)
-            if self.request.POST.get(field_id):
-                # Если галочка установлена, то делаем поле активным
-                field.is_active = True
-            else:
-                # Иначе - неактивным
-                field.is_active = False
+            field.is_active = field_id in self.request.POST
             field.save()
 
+        self.object.save()
+        messages.success(self.request, 'Форма успешно обновлена!')
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('forms:form_list')
