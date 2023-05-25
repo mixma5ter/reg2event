@@ -23,6 +23,7 @@ class FormAdmin(MyAdmin):
         'deal_id',
         'author',
         'title',
+        'link',
         'pub_date',
         'update_date',
     )

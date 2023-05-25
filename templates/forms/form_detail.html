@@ -32,10 +32,10 @@
   <form method="post" class="form-container">
     {% csrf_token %}
 
-    <!--    <div class="form-field">-->
-    <!--      <label for="form_url">Ссылка на форму регистрации:</label>-->
-    <!--      <input href="{{ form_url }}" id="form_url">{{ form.form_url }}</input>-->
-    <!--    </div>-->
+    <div class="form-field">
+      <label>Ссылка на форму:</label>
+      <h4>{{ link }}</h4>
+    </div>
     <div class="form-field">
       {{ form.deal_id.label_tag }}
       {{ form.deal_id }}

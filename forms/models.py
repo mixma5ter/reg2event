@@ -31,6 +31,12 @@ class Form(CreatedModel):
         verbose_name='Название формы',
         help_text='Введите название формы',
     )
+    link = models.CharField(
+        max_length=255,
+        verbose_name='Ссылка на форму',
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         ordering = ('-pub_date',)

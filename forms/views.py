@@ -65,6 +65,12 @@ class FormCreateView(LoginRequiredMixin, CreateView):
     context_object_name = 'form'
     title = 'Новая форма регистрации'
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.title
+        context['basic_fields'] = BASIC_FIELDS
+        return context
+
     def form_valid(self, form):
         # Проверяем, есть ли сделка в Битрикс с таким deal_id
         # если есть, получаем название мероприятия и дату проведения TODO
@@ -77,6 +83,9 @@ class FormCreateView(LoginRequiredMixin, CreateView):
             messages.warning(self.request, 'Форма с данным ID мероприятия уже существует!')
             return super().form_invalid(form)
         form.instance.author = self.request.user
+
+        form.instance.link = 'http://example.com/api/{}'.format(deal_id)
+
         # Сохраняем объект Form в БД
         form.save()
         # Получаем id созданной записи
@@ -118,12 +127,6 @@ class FormCreateView(LoginRequiredMixin, CreateView):
         success_url = reverse_lazy('forms:form_detail', args=[form_id])
         return redirect(success_url)
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = self.title
-        context['basic_fields'] = BASIC_FIELDS
-        return context
-
 
 class FormDetailView(LoginRequiredMixin, UpdateView):
     """Контроллер для просмотра и редактирования формы."""
@@ -132,35 +135,39 @@ class FormDetailView(LoginRequiredMixin, UpdateView):
     form_class = FormCreateForm
     template_name = 'forms/form_detail.html'
     context_object_name = 'form'
-    success_url = reverse_lazy('forms:forms_list')
+    success_url = reverse_lazy('forms:form_list')
     title = 'Редактирование формы'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Добавляем id формы в контекст шаблона
         context['form_id'] = self.object.id
+        context['link'] = self.object.link
         context['title'] = self.title
         context['fields'] = self.object.fields.all().order_by('id')
         return context
 
     def form_valid(self, form):
         """Переопределяем метод формы для сохранения изменений связанных полей поля формы."""
+
         self.object = form.save(commit=False)
         self.object.save()
 
-        fields_data = []
-        for key, value in self.request.POST.items():
-            if key.startswith('field-'):
-                field_id = key.split('-')[1]
-                field_data = {'id': field_id}
-                if value == 'on':
-                    field_data['value'] = True
-                else:
-                    field_data['value'] = value
-                fields_data.append(field_data)
+        deal_id = form.cleaned_data['deal_id']
+        form.instance.link = 'http://example.com/api/{}'.format(deal_id)
 
-        for field_data in fields_data:
-            field_id = field_data.pop('id')
-            Field.objects.filter(id=field_id).update(**field_data)
+        # Получаем список всех полей формы
+        fields = self.object.fields.all()
+
+        # Проходимся по каждому полю и проверяем его статус в форме
+        for field in fields:
+            field_id = 'field-{}-{}'.format(field.field_type, field.id)
+            if self.request.POST.get(field_id):
+                # Если галочка установлена, то делаем поле активным
+                field.is_active = True
+            else:
+                # Иначе - неактивным
+                field.is_active = False
+            field.save()
 
         return super().form_valid(form)
