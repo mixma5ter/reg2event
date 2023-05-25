@@ -1,0 +1,9 @@
+{% for label, type in field.items %}
+<div class="form-field form-field-checkbox">
+  <label for="id_{{ label }}">{{ label }}:</label>
+  <input class="form-check-input" type="checkbox" name="field-{{ type }}-{{ label }}"
+         id="id_{{ label }}"
+         {% if label== "ФИО" %} checked {% endif %}>
+</div>
+<hr class="form-field">
+{% endfor %}

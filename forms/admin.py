@@ -40,6 +40,7 @@ class FieldAdmin(MyAdmin):
         'label',
         'field_type',
         'form',
+        'is_active',
         'pub_date',
         'update_date',
     )

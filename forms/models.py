@@ -28,8 +28,8 @@ class Form(CreatedModel):
     )
     title = models.CharField(
         max_length=255,
-        verbose_name='Название мероприятия',
-        help_text='Введите название мероприятия',
+        verbose_name='Название формы',
+        help_text='Введите название формы',
     )
 
     class Meta:
@@ -71,6 +71,11 @@ class Field(CreatedModel):
         related_name='fields',
         verbose_name='Форма',
         help_text='Выберите форму'
+    )
+    is_active = models.BooleanField(
+        default=None,
+        verbose_name='Добавить поле в форму',
+        help_text='Поставьте галочку если нужно добавить поле в форму'
     )
 
     class Meta:

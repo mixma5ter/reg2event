@@ -6,7 +6,7 @@ $(document).ready(function () {
             var fieldHtml = `
                 <div class="form-field">
                     <label for="custom-${count}-input">Название поля:</label>
-                    <input type="text" name="custom-${count}-label" required id="custom-${count}-input">
+                    <input type="text" name="custom_field-${count}-label" required id="custom-${count}-input">
                     <label for="custom-${count}-input">Тип поля:</label>
                     <select name="custom-${count}-field_type">
                         <option value="text">Текст</option>

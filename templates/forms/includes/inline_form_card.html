@@ -16,9 +16,11 @@
         Дата создания:<br><b>{{ card.pub_date }}</b>
       </div>
       <div class="col-1 d-flex align-items-center">
-        <a href="#" class="btn btn-arrow">
-          <svg src="{% static 'img/arrow-right.svg' %}" width="24" height="24" fill="white" class="bi bi-arrow-right" viewBox="0 0 16 14">
-            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+        <a href="{% url 'forms:form_detail' pk=card.id %}" class="btn btn-arrow">
+          <svg src="{% static 'img/arrow-right.svg' %}" width="24" height="24" fill="white"
+               class="bi bi-arrow-right" viewBox="0 0 16 14">
+            <path fill-rule="evenodd"
+                  d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
           </svg>
         </a>
       </div>

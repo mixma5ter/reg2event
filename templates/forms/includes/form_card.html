@@ -1,11 +1,11 @@
 <div class="card">
-  <a href="#">
+  <a href="{% url 'forms:form_detail' pk=card.id %}">
     <div class="card-body">
       <div class="card__title">{{ card.title }}</div>
       <div class="card__deal-id">ID: {{ card.deal_id }}</div>
     </div>
     <div class="card-footer">
-      <small  class="card__date">Дата создания: {{ card.pub_date }}</small>
+      <small class="card__date">Дата создания: {{ card.pub_date }}</small>
     </div>
   </a>
 </div>

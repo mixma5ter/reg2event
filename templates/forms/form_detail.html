@@ -31,6 +31,11 @@
   {% endif %}
   <form method="post" class="form-container">
     {% csrf_token %}
+
+    <!--    <div class="form-field">-->
+    <!--      <label for="form_url">Ссылка на форму регистрации:</label>-->
+    <!--      <input href="{{ form_url }}" id="form_url">{{ form.form_url }}</input>-->
+    <!--    </div>-->
     <div class="form-field">
       {{ form.deal_id.label_tag }}
       {{ form.deal_id }}
@@ -42,19 +47,18 @@
 
     <hr class="form-field">
 
-    {% for field in basic_fields %}
-    {% include "forms/includes/basic_field.html" %}
+    {% for field in fields %}
+    <div class="form-field form-field-checkbox">
+      <label for="id_{{ field.label }}">{{ field.label }}:</label>
+      <input class="form-check-input" type="checkbox"
+             name="field-{{ field.field_type }}-{{ field.id }}" id="id_{{ field.label }}"
+             {% if field.is_active %} checked {% endif %}>
+    </div>
+    <hr class="form-field">
     {% endfor %}
 
-    <div id="fields"></div>
-    <button type="button" class="col-4 me-4 btn btn-lg btn-outline-primary" id="add-field">Добавить
-      поле
-    </button>
-    <button type="submit" class="col-4 me-4 btn btn-lg btn-outline-primary">Создать</button>
-
+    <button type="submit" class="col-4 me-4 btn btn-lg btn-outline-primary">Сохранить</button>
   </form>
 </div>
-
-<script type="text/javascript" src="{% static 'js/includes/add_field.js' %}"></script>
 
 {% endblock %}
