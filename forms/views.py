@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView
 
 from core.paginator import paginator
-from .forms import FormCreateForm
+from .forms import FormCreateForm, FormUpdateForm
 from .models import Form, Field
 
 CARDS_ON_INDEX_PAGE = 6
@@ -72,6 +72,11 @@ class FormCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         deal_id = form.cleaned_data['deal_id']
+        # Проверяем, есть ли запись в БД с таким deal_id
+        if Form.objects.filter(deal_id=deal_id).exists():
+            messages.warning(self.request,
+                             'Форма с ID мероприятия {} уже существует!'.format(deal_id))
+            return super().form_invalid(form)
         form.instance.link = 'http://example.com/api/{}'.format(deal_id)
         form.instance.author = self.request.user
         # Сохраняем объект Form в БД
@@ -120,7 +125,7 @@ class FormUpdateView(LoginRequiredMixin, UpdateView):
     """Контроллер для просмотра, редактирования и удаления формы."""
 
     model = Form
-    form_class = FormCreateForm
+    form_class = FormUpdateForm
     template_name = 'forms/form_update.html'
     context_object_name = 'form'
     title = 'Форма регистрации'
@@ -130,16 +135,12 @@ class FormUpdateView(LoginRequiredMixin, UpdateView):
         # Добавляем id формы в контекст шаблона
         context['title'] = self.title
         context['link'] = self.object.link
+        context['deal_id'] = self.object.deal_id
         context['fields'] = self.object.fields.all().order_by('id')
         return context
 
     def form_valid(self, form):
         """Переопределяем метод формы для сохранения изменений связанных полей поля формы."""
-
-        self.object = form.save(commit=False)
-
-        deal_id = form.cleaned_data['deal_id']
-        self.object.link = 'http://example.com/api/{}'.format(deal_id)
 
         # Получаем список всех полей формы
         fields = self.object.fields.all()

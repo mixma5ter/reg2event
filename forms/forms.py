@@ -25,9 +25,6 @@ class FormCreateForm(forms.ModelForm):
         # Проверяем, что длина числа не превышает 10 символов
         if len(str(deal_id)) > MAX_VALUE:
             raise forms.ValidationError('Слишком большое значение ID мероприятия!')
-        # Проверяем, есть ли запись в БД с таким deal_id
-        if Form.objects.filter(deal_id=deal_id).exists():
-            raise forms.ValidationError('Форма с ID мероприятия {} уже существует!'.format(deal_id))
 
         # Проверяем, есть ли сделка в Битрикс с таким deal_id
         # если есть, получаем название мероприятия и дату проведения TODO
@@ -35,3 +32,17 @@ class FormCreateForm(forms.ModelForm):
         # Проверяем дату проведения мероприятия TODO
 
         return deal_id
+
+
+class FormUpdateForm(forms.ModelForm):
+    """Форма изменяет форму в БД."""
+
+    class Meta:
+        model = Form
+        fields = ('title',)
+        help_texts = {
+            'title': 'Введите название мероприятия',
+        }
+        labels = {
+            'title': 'Название формы',
+        }
