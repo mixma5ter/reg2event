@@ -93,7 +93,7 @@ a:hover {
   max-width: 960px;
 }
 
-.cards_container {
+.cards-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
@@ -104,16 +104,12 @@ a:hover {
 .card {
   width: 30%;
   background-color: #cfcfcf;
-  -webkit-box-shadow: 4px 4px 8px 0 rgba(34, 60, 80, 0.2);
-  -moz-box-shadow: 4px 4px 8px 0 rgba(34, 60, 80, 0.2);
   box-shadow: 4px 4px 8px 0 rgba(34, 60, 80, 0.2);
-  margin: 15px;
-  margin-bottom: 30px;
-  border: 0;
-  outline: 1px solid #6f6f6f;
-  position: relative;
-  cursor: pointer;
-  transition: transform 0.3s ease-in-out;
+  margin: 15px 15px 30px;
+  border: 1px solid #6f6f6f;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .card:hover {
@@ -121,25 +117,23 @@ a:hover {
 }
 
 .card:active {
-  -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2) inset;
-  -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2) inset;
-  box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2) inset;
+  box-shadow: 4px 4px 8px 0 rgba(34, 60, 80, 0.2) inset;
 }
 
 .card__title {
-  font-size: 24px;
+  font-size: 1.5rem;
   color: #333;
-  margin-bottom: 10px;
+  margin-bottom: 0.625rem;
 }
 
 .card__deal-id {
-  font-size: 16px;
+  font-size: 1rem;
   color: #333;
-  margin-bottom: 5px;
+  margin-bottom: 0.3125rem;
 }
 
 .card__date {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: #333;
 }
 
@@ -147,7 +141,7 @@ a:hover {
   width: 100%;
   color: #414142;
   background-color: #cfcfcf;
-  margin: 10px 0;
+  margin: 1% 0;
 }
 
 .pagination .page-item .page-link {
@@ -162,7 +156,7 @@ a:hover {
   color: #333;
   background-color: #cfcfcf;
   border-color: #ddd;
-  box-shadow: none !important;
+  box-shadow: none;
 }
 
 .pagination .page-link:hover {
@@ -193,7 +187,7 @@ a:hover {
 
 .form-container label {
   width: 100%;
-  padding: 0 0 10px 0;
+  padding-bottom: 0.625rem;
 }
 
 .form-field input,
@@ -202,9 +196,9 @@ a:hover {
   vertical-align: top;
   outline: none;
   padding: 0;
-  margin-bottom: 10px;
-  height: 40px;
-  line-height: 40px;
+  margin-bottom: 0.625rem;
+  height: 2.5rem;
+  line-height: 2.5rem;
   text-indent: 10px;
   display: inline-block;
   justify-content: flex-end;
@@ -212,28 +206,28 @@ a:hover {
   box-sizing: border-box;
   border: 2px solid #ccc;
   border-radius: 3px;
-  box-shadow: none !important;
 }
 
 .form-field select {
-  width: 200px;
+  width: 12.5rem;
 }
 
 .form-field input[type="checkbox"] {
-  width: 40px;
+  width: 2.5rem;
+  box-shadow: none !important;
 }
 
 .form-check-input {
-  width: 40px;
+  width: 2.5rem;
 }
 
 .form-check-input:checked {
   background-color: #1e4278;
-  border-color: #1e4278;
+  border: none !important;
 }
 
 input[name="deal_id"] {
-  width: 200px;
+  width: 9.5rem;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
