@@ -9,6 +9,9 @@
 </div>
 
 <div class="container py-2">
+
+  {% include "forms/includes/massages.html" %}
+
   <a href="{% url 'forms:form_list' %}" class="col-4 me-4 btn btn-lg btn-outline-primary">
     Все формы
   </a>
@@ -17,7 +20,7 @@
   </a>
 </div>
 
-<div class="container cards_container">
+<div class="container cards-container">
   {% for card in page_obj %}
   {% include "forms/includes/form_card.html" %}
   {% endfor %}
