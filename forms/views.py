@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView
 
@@ -119,14 +120,15 @@ class FormCreateView(LoginRequiredMixin, CreateView):
                     )
                     field.save()
 
+        messages.success(self.request, 'Форма успешно создана!')
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('forms:form_detail', args=[self.object.id])
+        return reverse_lazy('forms:form_update', args=[self.object.id])
 
 
 class FormUpdateView(LoginRequiredMixin, UpdateView):
-    """Контроллер для просмотра и редактирования формы."""
+    """Контроллер для просмотра, редактирования и удаления формы."""
 
     model = Form
     form_class = FormCreateForm
@@ -162,6 +164,15 @@ class FormUpdateView(LoginRequiredMixin, UpdateView):
         self.object.save()
         messages.success(self.request, 'Форма успешно обновлена!')
         return super().form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        if 'delete' in request.POST:
+            form = self.get_object()
+            form.delete()
+            messages.success(self.request, 'Форма успешно удалена!')
+            return redirect('forms:form_list')
+        else:
+            return super().post(request, *args, **kwargs)
 
     def get_success_url(self):
         return reverse_lazy('forms:form_list')

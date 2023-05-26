@@ -34,9 +34,20 @@ a:hover {
   box-shadow: 4px 4px 8px 0 rgba(34, 60, 80, 0.2);
 }
 
+.btn-danger {
+  color: #c32c2c;
+  border: solid 1px #c32c2c;
+  background-color: #e7e7e7;
+}
+
 .btn:hover {
   color: #fff;
   background-color: #dc6326;
+}
+
+.btn-danger:hover {
+  color: #fff;
+  background-color: #c32c2c;
 }
 
 .btn:focus,

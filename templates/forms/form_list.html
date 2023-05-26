@@ -9,6 +9,24 @@
 </div>
 
 <div class="container py-2">
+  {% if form.errors %}
+  <div class="alert alert-danger">
+    {% for field, errors in form.errors.items %}
+    {% for error in errors %}
+    {{ error }}<br>
+    {% endfor %}
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if messages %}
+  <div class="alert alert-success">
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+  </div>
+  {% endif %}
+
   <a href="{% url 'forms:index' %}" class="col-4 me-4 btn btn-lg btn-outline-primary">
     Главная
   </a>
