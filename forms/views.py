@@ -71,20 +71,9 @@ class FormCreateView(LoginRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
-        # Проверяем, есть ли сделка в Битрикс с таким deal_id
-        # если есть, получаем название мероприятия и дату проведения TODO
-
-        # Проверяем дату проведения мероприятия TODO
-
-        # Проверяем, есть ли запись в БД с таким deal_id
         deal_id = form.cleaned_data['deal_id']
-        if Form.objects.filter(deal_id=deal_id).exists():
-            messages.warning(self.request, 'Форма с данным ID мероприятия уже существует!')
-            return super().form_invalid(form)
-        form.instance.author = self.request.user
-
         form.instance.link = 'http://example.com/api/{}'.format(deal_id)
-
+        form.instance.author = self.request.user
         # Сохраняем объект Form в БД
         form.save()
         # Получаем id созданной записи
