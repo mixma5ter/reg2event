@@ -1,9 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, UpdateView
 
+from config import settings
 from core.paginator import paginator
 from .forms import FormCreateForm, FormUpdateForm
 from .models import Form, Field
@@ -77,7 +78,13 @@ class FormCreateView(LoginRequiredMixin, CreateView):
             messages.warning(self.request,
                              'Форма с ID мероприятия {} уже существует!'.format(deal_id))
             return super().form_invalid(form)
-        form.instance.link = 'http://example.com/api/{}'.format(deal_id)
+
+        # Конструктор ссылки на страницу регистрации TODO
+        form.instance.link = 'http://{}:8000{}'.format(settings.ALLOWED_HOSTS[0],
+                                                       reverse('reg:reg_form',
+                                                               args=[form.instance.deal_id]))
+
+        # Добавляем автора
         form.instance.author = self.request.user
         # Сохраняем объект Form в БД
         form.save()
