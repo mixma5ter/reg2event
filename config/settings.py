@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'forms.apps.FormsConfig',
     'users.apps.UsersConfig',
     'core.apps.CoreConfig',
+    'reg.apps.RegConfig',
 ]
 
 MIDDLEWARE = [
