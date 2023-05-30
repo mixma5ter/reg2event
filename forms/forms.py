@@ -1,5 +1,7 @@
+import requests
 from django import forms
 
+from config.settings import WEB_HOOK
 from .models import Form
 
 MAX_VALUE = 8  # максимальное длина числа в ID мероприятия
@@ -27,9 +29,25 @@ class FormCreateForm(forms.ModelForm):
             raise forms.ValidationError('Слишком большое значение ID мероприятия!')
 
         # Проверяем, есть ли сделка в Битрикс с таким deal_id
-        # если есть, получаем название мероприятия и дату проведения TODO
+        # если есть, получаем название мероприятия и дату проведения
+        url = '{}crm.deal.get'.format(WEB_HOOK)
+        payload = {'id': deal_id}
+        response = requests.post(url, json=payload)
 
-        # Проверяем дату проведения мероприятия TODO
+        if response.status_code != 200:
+            raise forms.ValidationError('Ошибка запроса к Битрикс! Проверьте ID мероприятия!')
+
+        data = response.json()
+        if data.get('error'):
+            raise forms.ValidationError('Ошибка получения данных из Битрикс!')
+
+        if not data.get('result'):
+            raise forms.ValidationError('Нет сделки с таким ID!')
+
+        # Проверяем статус сделки
+        is_closed_str = data['result']['CLOSED']
+        if is_closed_str == 'Y':
+            raise forms.ValidationError('Сделка с ID {} уже закрыта!'.format(deal_id))
 
         return deal_id
 

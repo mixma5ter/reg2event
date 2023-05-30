@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, UpdateView
 
-from config import settings
+from config.settings import FORM_LINK
 from core.paginator import paginator
 from .forms import FormCreateForm, FormUpdateForm
 from .models import Form, Field
@@ -30,7 +30,7 @@ class IndexView(LoginRequiredMixin, ListView):
     paginate_by = CARDS_ON_INDEX_PAGE
 
     def get_queryset(self):
-        return Form.objects.order_by('-pub_date')  # [:CARDS_ON_INDEX_PAGE]
+        return Form.objects.order_by('-pub_date')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -75,14 +75,12 @@ class FormCreateView(LoginRequiredMixin, CreateView):
         deal_id = form.cleaned_data['deal_id']
         # Проверяем, есть ли запись в БД с таким deal_id
         if Form.objects.filter(deal_id=deal_id).exists():
-            messages.warning(self.request,
-                             'Форма с ID мероприятия {} уже существует!'.format(deal_id))
+            massage_template = 'Форма с ID мероприятия {} уже существует!'
+            messages.warning(self.request, massage_template.format(deal_id))
             return super().form_invalid(form)
 
-        # Конструктор ссылки на страницу регистрации TODO
-        form.instance.link = 'http://{}:8000{}'.format(settings.ALLOWED_HOSTS[0],
-                                                       reverse('reg:reg_form',
-                                                               args=[form.instance.deal_id]))
+        # Конструктор ссылки на страницу регистрации
+        form.instance.link = FORM_LINK + reverse('reg:reg_form', args=[form.instance.deal_id])
 
         # Добавляем автора
         form.instance.author = self.request.user

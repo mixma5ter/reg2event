@@ -20,7 +20,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
-
+FORM_LINK = 'http://127.0.0.1:8000'
+WEB_HOOK = os.getenv('BITRIX_WEB_HOOK')
 
 # Application definition
 

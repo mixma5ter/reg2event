@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+<div class="container py-4 mt-3">
+  <h1 class="text-start">{{ title }}</h1>
+</div>
+
+<div class="container py-2">
+  {% include "forms/includes/massages.html" %}
+</div>
+
+{% endblock %}

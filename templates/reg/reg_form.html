@@ -10,16 +10,18 @@
   <h1 class="text-start">{{ reg_form.title }}</h1>
 </div>
 
-{% include "forms/includes/massages.html" %}
+<div class="container py-2">
+  {% include "forms/includes/massages.html" %}
+</div>
 
 <div class="container py-4">
-  <form method="POST" class="form-container" action="url 'form_submit'">
+  <form method="POST" class="form-container">
     {% csrf_token %}
     {% for field in reg_fields %}
     <div class="form-field">
       <label for="id_{{ field.label }}">{{ field.label }}:</label>
       <input class="form-check-input" type="{{ field.field_type }}"
-             name="field-{{ field.field_type }}-{{ field.id }}" id="id_{{ field.label }}">
+             name="{{ field.label }}" id="id_{{ field.label }}">
     </div>
     <hr class="form-field">
     {% endfor %}
