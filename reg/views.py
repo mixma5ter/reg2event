@@ -15,10 +15,10 @@ class RegView(View):
 
         template_name = 'reg/reg_form.html'
 
-        # Получаем модель формы по ID
+        # Получаем модель формы по deal_id
         reg_form = get_object_or_404(Form, deal_id=deal_id)
-        # Получаем поля формы связанные с формой
-        reg_fields = reg_form.fields.all().filter(is_active=True).order_by('pk')
+        # Получаем поля формы связанные с формой и со значением is_active=True
+        reg_fields = reg_form.fields.filter(is_active=True).order_by('pk')
         context = {
             'reg_form': reg_form,
             'reg_fields': reg_fields,
@@ -39,32 +39,41 @@ class RegView(View):
         data = request.POST.dict()
 
         # Формируем данные для создания сделки в Битрикс24
-        fields = {}
-        for field in reg_fields:
-            if field.label in data:
-                fields[field.label] = data[field.label]
+        fields = {field.label: data.get(field.label, '') for field in reg_fields}
 
         # Отправляем запрос на создание сделки в Битрикс24 по вебхуку
         url = '{}crm.deal.add.json'.format(WEB_HOOK)
-        headers = {'Content-Type': 'application/json'}
         params = {
             'fields': {
-                'TITLE': 'Тестовая сделка',  # название новой сделки
+                'TITLE': reg_form.title,  # название новой сделки
                 'STAGE_ID': 'C10:NEW',  # этап сделки
+                'CONTACT_ID': 262,
                 'CATEGORY_ID': 10,  # регистрация
-                'ASSOCIATED_DEAL_ID': deal_id,  # ID связанной сделки
+                'COMMENTS': 'Комментарий: тестовая сделка для проверки работы вэбхука',
+                'OPENED': 'Y',
+                'CLOSED': 'Y',
+                'SOURCE_ID': 'WEBFORM',  # Источник
+                'SOURCE_DESCRIPTION': 'Автоматически созданная сделка',
+                'ASSIGNED_BY_ID': '12',
+                'CREATED_BY_ID': '12',
+                'MOVED_BY_ID': '12',
+                'LAST_ACTIVITY_BY': '12',
+
+                'UF_CRM_1666041653': reg_form.title,  # Р: Мероприятие
             },
             'params': {'REGISTER_SONET_EVENT': 'Y'},
         }
-        response = requests.get(url, headers=headers, json=params)
+        # Добавление полей из формы в параметры запроса
+        params['fields'].update(fields)
+        response = requests.post(url, json=params)
 
         # Обрабатываем ответ от Битрикс24
         if response.ok:
             message = 'Сделка успешно создана!'
-            messages.success(self.request, message)
+            messages.success(request, message)
         else:
             message = 'Ошибка при создании сделки!'
-            messages.warning(self.request, message)
+            messages.warning(request, message)
 
         context = {
             'title': message,
