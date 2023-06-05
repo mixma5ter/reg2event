@@ -89,6 +89,12 @@ class Field(CreatedModel):
         verbose_name='Добавить поле в форму',
         help_text='Поставьте галочку если нужно добавить поле в форму'
     )
+    bitrix_id = models.CharField(
+        max_length=255,
+        verbose_name='Битрикс ID',
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         ordering = ('-pub_date',)

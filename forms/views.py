@@ -4,9 +4,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, UpdateView
 
-from transliterate import translit
-
-from core.bitrix import request
+from core.bitrix import create_list, create_field, delete_list, delete_field, update_list
 from core.paginator import paginator
 from .forms import FormCreateForm, FormUpdateForm
 from .models import Form, Field
@@ -92,12 +90,7 @@ class FormCreateView(LoginRequiredMixin, CreateView):
         form_id = form.instance.id
 
         # Создаем список в Битрикс
-        fields = {
-            'NAME': form.instance.title,
-            'DESCRIPTION': 'Список регистрации на мероприятие',
-            'BIZPROC': 'Y',
-        }
-        request('lists.add', deal_id, fields)
+        create_list(deal_id, form.instance.title)
 
         # Создаем базовые поля
         fields = [Field(label=label, field_type=field_type, form_id=form_id, is_active=False) for
@@ -105,7 +98,6 @@ class FormCreateView(LoginRequiredMixin, CreateView):
         Field.objects.bulk_create(fields)
 
         # Получаем поля формы Field из POST-запроса и сохраняем их в БД
-        sorting = 10
         for key, value in self.request.POST.items():
             # Получаем базовые поля
             if key.startswith('field-'):
@@ -113,20 +105,11 @@ class FormCreateView(LoginRequiredMixin, CreateView):
                 field = Field.objects.filter(form_id=form_id, label=field_data[2]).first()
                 if field:
                     field.is_active = value == 'on'
-                    field.save()
-
                     # Сохраняем поле в Битрикс
-                    sorting += 10
-                    fields = {
-                        'NAME': field.label,
-                        'TYPE': 'S',
-                        'SORT': sorting,
-                        'IS_REQUIRED': 'Y',
-                        'CODE': 'field_{}'.format(
-                            translit(field.label, language_code='ru', reversed=True)).replace(' ',
-                                                                                              '_')
-                    }
-                    request('lists.field.add', deal_id, fields)
+                    result = create_field(deal_id, field.label)
+                    field.bitrix_id = result
+                    # Сохраняем поле в БД
+                    field.save()
 
             # Получаем кастомные поля
             elif key.startswith('custom_field-'):
@@ -141,20 +124,11 @@ class FormCreateView(LoginRequiredMixin, CreateView):
                         field_type=field_type,
                         is_active=True,
                     )
-                    field.save()
-
                     # Сохраняем поле в Битрикс
-                    sorting += 10
-                    fields = {
-                        'NAME': field.label,
-                        'TYPE': 'S',
-                        'SORT': sorting,
-                        'IS_REQUIRED': 'Y',
-                        'CODE': 'field_{}'.format(
-                            translit(field.label, language_code='ru', reversed=True)).replace(' ',
-                                                                                              '_')
-                    }
-                    request('lists.field.add', deal_id, fields)
+                    result = create_field(deal_id, field.label)
+                    field.bitrix_id = result
+                    # Сохраняем поле в БД
+                    field.save()
 
         messages.success(self.request, 'Форма успешно создана!')
         return super().form_valid(form)
@@ -185,6 +159,9 @@ class FormUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         """Переопределяем метод формы для сохранения изменений связанных полей поля формы."""
 
+        # Обновляем список в Битрикс
+        update_list(self.object.deal_id, form.instance.title)
+
         # Получаем список всех полей формы
         fields = self.object.fields.all()
 
@@ -192,9 +169,15 @@ class FormUpdateView(LoginRequiredMixin, UpdateView):
         for field in fields:
             field_id = 'field-{}-{}'.format(field.field_type, field.id)
             field.is_active = field_id in self.request.POST
+            # Изменяем поле в Битрикс
+            if field.is_active:
+                result = create_field(self.object.deal_id, field.label)
+                if result:
+                    field.bitrix_id = result
+            else:
+                delete_field(self.object.deal_id, field.bitrix_id)
             field.save()
 
-        self.object.save()
         messages.success(self.request, 'Форма успешно обновлена!')
         return super().form_valid(form)
 
@@ -202,6 +185,8 @@ class FormUpdateView(LoginRequiredMixin, UpdateView):
         if 'delete' in request.POST:
             form = self.get_object()
             form.delete()
+            # Удаляем список в Битрикс
+            delete_list(form.deal_id)
             messages.success(self.request, 'Форма успешно удалена!')
             return redirect('forms:form_list')
         else:

@@ -16,7 +16,7 @@ class MyAdmin(admin.ModelAdmin):
 
 @admin.register(Form)
 class FormAdmin(MyAdmin):
-    """Регистрация модели конкурса в админке."""
+    """Регистрация модели формы в админке."""
 
     list_display = (
         'pk',
@@ -35,7 +35,7 @@ class FormAdmin(MyAdmin):
 
 @admin.register(Field)
 class FieldAdmin(MyAdmin):
-    """Регистрация модели конкурса в админке."""
+    """Регистрация модели поля формы в админке."""
 
     list_display = (
         'pk',
@@ -43,6 +43,7 @@ class FieldAdmin(MyAdmin):
         'field_type',
         'form',
         'is_active',
+        'bitrix_id',
         'pub_date',
         'update_date',
     )
@@ -53,7 +54,7 @@ class FieldAdmin(MyAdmin):
 
 @admin.register(FieldChoice)
 class FieldChoiceAdmin(MyAdmin):
-    """Регистрация модели конкурса в админке."""
+    """Регистрация модели поля выбора в админке."""
 
     list_display = (
         'pk',
