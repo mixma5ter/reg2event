@@ -24,10 +24,13 @@ class Command(BaseCommand):
 
         for _ in range(8):
             try:
+                deal_id = str(uuid.uuid1().int)[:random.randrange(4, 6)]
                 Form.objects.get_or_create(
-                    deal_id=str(uuid.uuid1().int)[:random.randrange(4, 6)],
+                    deal_id=deal_id,
                     author=random.choice(User.objects.all()),
                     title=template,
+                    form_link=f'/reg/{deal_id}',
+                    stream_link=f'http://example.stream.link.com',
                 )
                 form_id = Form.objects.latest('id').pk
                 fields = [

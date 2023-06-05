@@ -4,7 +4,6 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, UpdateView
 
-from config.settings import FORM_LINK
 from core.paginator import paginator
 from .forms import FormCreateForm, FormUpdateForm
 from .models import Form, Field
@@ -80,7 +79,7 @@ class FormCreateView(LoginRequiredMixin, CreateView):
             return super().form_invalid(form)
 
         # Конструктор ссылки на страницу регистрации
-        form.instance.link = FORM_LINK + reverse('reg:reg_form', args=[form.instance.deal_id])
+        form.instance.form_link = reverse('reg:reg_form', args=[form.instance.deal_id])
 
         # Добавляем автора
         form.instance.author = self.request.user
@@ -139,7 +138,8 @@ class FormUpdateView(LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         # Добавляем id формы в контекст шаблона
         context['title'] = self.title
-        context['link'] = self.object.link
+        context['form_link'] = self.object.form_link
+        context['stream_link'] = self.object.stream_link
         context['deal_id'] = self.object.deal_id
         context['fields'] = self.object.fields.all().order_by('id')
         return context

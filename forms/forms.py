@@ -12,14 +12,16 @@ class FormCreateForm(forms.ModelForm):
 
     class Meta:
         model = Form
-        fields = ('deal_id', 'title',)
+        fields = ('deal_id', 'title', 'stream_link',)
         help_texts = {
             'deal_id': 'Введите ID мероприятия',
             'title': 'Введите название мероприятия',
+            'stream_link': 'Добавьте ссылку на трансляцию',
         }
         labels = {
             'deal_id': 'ID мероприятия',
             'title': 'Название формы',
+            'stream_link': 'Ссылка на трансляцию',
         }
 
     def clean_deal_id(self):
@@ -57,10 +59,12 @@ class FormUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Form
-        fields = ('title',)
+        fields = ('title', 'stream_link',)
         help_texts = {
             'title': 'Введите название мероприятия',
+            'stream_link': 'Добавьте ссылку на трансляцию',
         }
         labels = {
             'title': 'Название формы',
+            'stream_link': 'Ссылка на трансляцию',
         }
