@@ -4,6 +4,9 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, UpdateView
 
+from transliterate import translit
+
+from core.bitrix import request
 from core.paginator import paginator
 from .forms import FormCreateForm, FormUpdateForm
 from .models import Form, Field
@@ -88,20 +91,42 @@ class FormCreateView(LoginRequiredMixin, CreateView):
         # Получаем id созданной записи
         form_id = form.instance.id
 
+        # Создаем список в Битрикс
+        fields = {
+            'NAME': form.instance.title,
+            'DESCRIPTION': 'Список регистрации на мероприятие',
+            'BIZPROC': 'Y',
+        }
+        request('lists.add', deal_id, fields)
+
         # Создаем базовые поля
         fields = [Field(label=label, field_type=field_type, form_id=form_id, is_active=False) for
                   field_data in BASIC_FIELDS for label, field_type in field_data.items()]
         Field.objects.bulk_create(fields)
 
         # Получаем поля формы Field из POST-запроса и сохраняем их в БД
+        sorting = 10
         for key, value in self.request.POST.items():
-            # Изменяем базовые поля
+            # Получаем базовые поля
             if key.startswith('field-'):
                 field_data = key.split('-')
                 field = Field.objects.filter(form_id=form_id, label=field_data[2]).first()
                 if field:
                     field.is_active = value == 'on'
                     field.save()
+
+                    # Сохраняем поле в Битрикс
+                    sorting += 10
+                    fields = {
+                        'NAME': field.label,
+                        'TYPE': 'S',
+                        'SORT': sorting,
+                        'IS_REQUIRED': 'Y',
+                        'CODE': 'field_{}'.format(
+                            translit(field.label, language_code='ru', reversed=True)).replace(' ',
+                                                                                              '_')
+                    }
+                    request('lists.field.add', deal_id, fields)
 
             # Получаем кастомные поля
             elif key.startswith('custom_field-'):
@@ -117,6 +142,19 @@ class FormCreateView(LoginRequiredMixin, CreateView):
                         is_active=True,
                     )
                     field.save()
+
+                    # Сохраняем поле в Битрикс
+                    sorting += 10
+                    fields = {
+                        'NAME': field.label,
+                        'TYPE': 'S',
+                        'SORT': sorting,
+                        'IS_REQUIRED': 'Y',
+                        'CODE': 'field_{}'.format(
+                            translit(field.label, language_code='ru', reversed=True)).replace(' ',
+                                                                                              '_')
+                    }
+                    request('lists.field.add', deal_id, fields)
 
         messages.success(self.request, 'Форма успешно создана!')
         return super().form_valid(form)
