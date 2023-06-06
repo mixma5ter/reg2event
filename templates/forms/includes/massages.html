@@ -1,17 +1,17 @@
+{% if messages %}
+<div class="alert alert-success">
+  {% for message in messages %}
+  {{ message }}
+  {% endfor %}
+</div>
+{% endif %}
+
 {% if form.errors %}
 <div class="alert alert-danger">
   {% for field, errors in form.errors.items %}
   {% for error in errors %}
   {{ error }}<br>
   {% endfor %}
-  {% endfor %}
-</div>
-{% endif %}
-
-{% if messages %}
-<div class="alert alert-success">
-  {% for message in messages %}
-  {{ message }}
   {% endfor %}
 </div>
 {% endif %}

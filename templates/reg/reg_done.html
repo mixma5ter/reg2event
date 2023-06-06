@@ -7,11 +7,21 @@
 {% block content %}
 
 <div class="container py-4 mt-3">
-  <h1 class="text-start">{{ title }}</h1>
+  <h1 class="text-center">{{ title }}</h1>
 </div>
 
 <div class="container py-2">
   {% include "forms/includes/massages.html" %}
 </div>
+
+{% if stream_link %}
+<div class="container py-2 text-center">
+  <hr>
+  <h4>Ваша ссылка на трансляцию</h4>
+  <p>Сохраните её для дальнейшего использования</p>
+  <a href="{{ stream_link }}"><span style="font-size: xx-large">{{ stream_link }}</span></a>
+  <hr>
+</div>
+{% endif %}
 
 {% endblock %}

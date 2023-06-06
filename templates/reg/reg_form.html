@@ -7,7 +7,7 @@
 {% block content %}
 
 <div class="container py-4 mt-3">
-  <h1 class="text-start">{{ reg_form.title }}</h1>
+  <h1 class="text-start">{{ title }}</h1>
 </div>
 
 <div class="container py-2">
@@ -15,15 +15,19 @@
 </div>
 
 <div class="container py-4">
-  <form method="POST" class="form-container">
+  <form method="POST" class="form-container" id="reg-form">
     {% csrf_token %}
-    {% for field in reg_fields %}
+    {% for field in form %}
     <div class="form-field">
-      <label for="id_{{ field.label }}">{{ field.label }}:</label>
-      <input class="form-check-input" type="{{ field.field_type }}"
-             name="{{ field.label }}" id="id_{{ field.label }}">
+      <label for="{{ field.name }}">{{ field.label }}</label>
+      {% if field.field.widget.input_type == 'checkbox' %}
+      <div class="form-field-checkbox">
+        {{ field }}
+      </div>
+      {% else %}
+      {{ field }}
+      {% endif %}
     </div>
-    <hr class="form-field">
     {% endfor %}
     <button type="submit" class="col-4 me-4 btn btn-lg">Отправить</button>
   </form>
