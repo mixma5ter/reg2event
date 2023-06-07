@@ -86,7 +86,7 @@ def delete_field(event, field_id):
     return result.json().get('result')
 
 
-def create_element(event, fields):
+def create_element(event, element, fields):
     """Создает элемент в списке event в Битрикс."""
 
     command = 'lists.element.add'
@@ -96,6 +96,7 @@ def create_element(event, fields):
         'SOCNET_GROUP_ID': SOCNET_GROUP_ID,
         'IBLOCK_CODE': IBLOCK_CODE.format(event),
         'ELEMENT_CODE': uuid.uuid1().int,
+        # 'ELEMENT_CODE': element,
         'FIELDS': fields
     }
     return requests.post(url, json=params)

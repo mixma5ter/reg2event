@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.views import View
 
 from core.bitrix import create_element
@@ -36,17 +36,13 @@ class RegView(View):
                     fields[key] = value
 
             # Создание нового элемента в Битрикс
-            response = create_element(deal_id, fields)
+            session = request.session.session_key
+
+            response = create_element(deal_id, session, fields)
             if response.ok:
-                stream_link = get_object_or_404(Form, deal_id=deal_id).stream_link
-                context = {
-                    'title': 'Регистрация успешно завершена',
-                    'stream_link': stream_link,
-                }
-                return render(request, 'reg/reg_done.html', context)
+                return redirect('reg:reg_done', deal_id=deal_id)
             else:
-                context = {'title': 'Возникла ошибка при регистрации'}
-                return render(request, 'reg/reg_done.html', context)
+                return redirect('reg:reg_error', deal_id=deal_id)
 
         else:
             context = {
@@ -55,3 +51,37 @@ class RegView(View):
                 'errors': reg_form.errors.items()
             }
             return render(request, self.template_name, context)
+
+
+class RegDoneView(View):
+    """Страница успешной регистрации."""
+
+    model = Form
+    template_name = 'reg/reg_done.html'
+    context_object_name = 'reg'
+    title = 'Регистрация успешно завершена'
+
+    def get(self, request, deal_id):
+        stream_link = get_object_or_404(Form, deal_id=deal_id).stream_link
+        context = {
+            'deal_id': deal_id,
+            'title': self.title,
+            'stream_link': stream_link,
+        }
+        return render(request, self.template_name, context)
+
+
+class RegErrorView(View):
+    """Страница неудачной регистрации."""
+
+    model = Form
+    template_name = 'reg/reg_error.html'
+    context_object_name = 'reg'
+    title = 'Возникла ошибка при регистрации'
+
+    def get(self, request, deal_id):
+        context = {
+            'deal_id': deal_id,
+            'title': self.title,
+        }
+        return render(request, self.template_name, context)

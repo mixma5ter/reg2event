@@ -14,16 +14,6 @@
   {% include "forms/includes/massages.html" %}
 </div>
 
-{% if stream_link %}
-<div class="container py-2 text-center">
-  <hr>
-  <h4>Ваша ссылка на трансляцию</h4>
-  <p>Сохраните её для дальнейшего использования</p>
-  <a href="{{ stream_link }}"><span style="font-size: xx-large">{{ stream_link }}</span></a>
-  <hr>
-</div>
-{% endif %}
-
 <div class="container py-2 text-center">
   <a href="{% url 'reg:reg_form' deal_id=deal_id %}"
      class="col-4 me-4 btn btn-lg btn-outline-primary">
