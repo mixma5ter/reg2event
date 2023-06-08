@@ -1,12 +1,12 @@
 from django.urls import path
 
-from .views import RegView, RegDoneView, RegErrorView
+from .views import RegView, RegInfoView
 
 app_name = 'reg'
 
 urlpatterns = [
     # Страница регистрации
     path('<int:deal_id>/', RegView.as_view(), name='reg_form'),
-    path('<int:deal_id>/done/', RegDoneView.as_view(), name='reg_done'),
-    path('<int:deal_id>/error/', RegErrorView.as_view(), name='reg_error'),
+    # Страница информации о регистрации
+    path('<int:deal_id>/<str:slug>/', RegInfoView.as_view(), name='reg_info'),
 ]

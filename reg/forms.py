@@ -14,20 +14,25 @@ class RegForm(forms.Form):
         for field in active_fields:
             if field.field_type == 'text':
                 self.fields[field.label] = forms.CharField(
-                    max_length=100, widget=TextInput(attrs={'class': 'form-control'}))
+                    max_length=100,
+                    widget=TextInput(attrs={'class': 'form-control'}))
             elif field.field_type == 'textarea':
                 self.fields[field.label] = forms.CharField(
-                    max_length=255, required=False,
+                    max_length=255,
+                    required=False,
                     widget=TextInput(attrs={'class': 'form-control'}))
             elif field.field_type == 'number':
                 self.fields[field.label] = forms.IntegerField(
                     widget=TextInput(attrs={'class': 'form-control'}))
             elif field.field_type == 'email':
                 self.fields[field.label] = forms.EmailField(
-                    max_length=100, widget=EmailInput(attrs={'class': 'form-control'}))
+                    max_length=100,
+                    widget=EmailInput(attrs={'class': 'form-control'}))
             elif field.field_type == 'phone':
                 self.fields[field.label] = forms.CharField(
-                    max_length=14, widget=TextInput(attrs={'class': 'form-control'}))
+                    max_length=14,
+                    widget=TextInput(attrs={'class': 'form-control'}))
             elif field.field_type == 'checkbox':
                 self.fields[field.label] = forms.BooleanField(
-                    required=False, widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
+                    required=False,
+                    widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))

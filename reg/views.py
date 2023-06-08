@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views import View
 
-from core.bitrix import create_element, get_deal
+from core.bitrix import check_deal, create_element
 from forms.models import Form
 from reg.forms import RegForm
 
@@ -16,6 +16,13 @@ class RegView(View):
     title = 'Регистрация'
 
     def get(self, request, deal_id):
+
+        reg_info = check_deal(deal_id)
+        if reg_info['errors']:
+            return redirect('reg:reg_info', deal_id=deal_id, slug='error')
+        elif reg_info['closed']:
+            return redirect('reg:reg_info', deal_id=deal_id, slug='closed')
+
         reg_form = self.form_class(deal_id=deal_id)
         context = {
             'title': self.title,
@@ -24,19 +31,16 @@ class RegView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, deal_id):
-        # Проверяем, есть ли сделка в Битрикс с таким deal_id
-        response = get_deal(deal_id)
-        data = response.json()
-        # Если есть ошибки при запросе или сделка уже закрыта
-        # отправляем пользователя на страницу неудачной регистрации
-        if (response.status_code != 200 or not data.get('result') or
-                data.get('error') or data['result']['CLOSED'] == 'Y'):
-            return redirect('reg:reg_error', deal_id=deal_id)
+
+        reg_info = check_deal(deal_id)
+        if reg_info['errors']:
+            return redirect('reg:reg_info', deal_id=deal_id, slug='error')
+        elif reg_info['closed']:
+            return redirect('reg:reg_info', deal_id=deal_id, slug='closed')
 
         reg_form = self.form_class(request.POST, deal_id=deal_id)
         if reg_form.is_valid():
             form = get_object_or_404(Form, deal_id=deal_id)
-
             fields = {'NAME': 'Регистрация'}
             for field in form.fields.all():
                 key = field.bitrix_id
@@ -50,14 +54,14 @@ class RegView(View):
                 if value:
                     fields[key] = value
 
-            # Создание нового элемента в Битрикс
+            # Создание нового элемента в Битрикс TODO
             session = request.session.session_key
 
             response = create_element(deal_id, session, fields)
             if response.ok:
-                return redirect('reg:reg_done', deal_id=deal_id)
+                return redirect('reg:reg_info', deal_id=deal_id, slug='success')
             else:
-                return redirect('reg:reg_error', deal_id=deal_id)
+                return redirect('reg:reg_info', deal_id=deal_id, slug='error')
 
         else:
             context = {
@@ -68,35 +72,29 @@ class RegView(View):
             return render(request, self.template_name, context)
 
 
-class RegDoneView(View):
-    """Страница успешной регистрации."""
+class RegInfoView(View):
+    """Страница информации о регистрации."""
 
     model = Form
-    template_name = 'reg/reg_done.html'
+    template_name = 'reg/reg_info.html'
     context_object_name = 'reg'
-    title = 'Регистрация успешно завершена'
 
-    def get(self, request, deal_id):
+    def get(self, request, deal_id, slug):
+        title = 'Регистрация прошла успешно'
         stream_link = get_object_or_404(Form, deal_id=deal_id).stream_link
+        new_reg = True
+
+        if slug == 'closed':
+            title = 'Регистрация закрыта'
+            new_reg = False
+        elif slug == 'error':
+            title = 'Возникла ошибка при регистрации'
+            stream_link = None
+
         context = {
             'deal_id': deal_id,
-            'title': self.title,
+            'title': title,
             'stream_link': stream_link,
-        }
-        return render(request, self.template_name, context)
-
-
-class RegErrorView(View):
-    """Страница неудачной регистрации."""
-
-    model = Form
-    template_name = 'reg/reg_error.html'
-    context_object_name = 'reg'
-    title = 'Возникла ошибка при регистрации'
-
-    def get(self, request, deal_id):
-        context = {
-            'deal_id': deal_id,
-            'title': self.title,
+            'new_reg': new_reg,
         }
         return render(request, self.template_name, context)

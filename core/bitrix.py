@@ -33,6 +33,20 @@ def get_deal(deal_id):
     return requests.post(url, json=payload)
 
 
+def check_deal(deal_id):
+    """Проверка доступности регистрации."""
+
+    response = get_deal(deal_id)
+    data = response.json()
+    result = {
+        'status': response.status_code,
+        'result': data.get('result'),
+        'closed': True if data['result']['CLOSED'] == 'Y' else False,
+        'errors': data.get('error'),
+    }
+    return result
+
+
 def create_list(event, name):
     """Создает список name с событием event в Битрикс. Возвращает id списка."""
 
