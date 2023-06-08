@@ -1,7 +1,6 @@
-import requests
 from django import forms
 
-from config.settings import WEB_HOOK
+from core.bitrix import get_deal
 from .models import Form
 
 MAX_VALUE = 8  # максимальное длина числа в ID мероприятия
@@ -32,9 +31,7 @@ class FormCreateForm(forms.ModelForm):
 
         # Проверяем, есть ли сделка в Битрикс с таким deal_id
         # если есть, получаем название мероприятия и дату проведения
-        url = '{}crm.deal.get'.format(WEB_HOOK)
-        payload = {'id': deal_id}
-        response = requests.post(url, json=payload)
+        response = get_deal(deal_id)
 
         if response.status_code != 200:
             raise forms.ValidationError('Ошибка запроса к Битрикс! Проверьте ID мероприятия!')

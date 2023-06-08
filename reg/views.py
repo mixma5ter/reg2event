@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views import View
 
-from core.bitrix import create_element
+from core.bitrix import create_element, get_deal
 from forms.models import Form
 from reg.forms import RegForm
 
@@ -24,6 +24,15 @@ class RegView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, deal_id):
+        # Проверяем, есть ли сделка в Битрикс с таким deal_id
+        response = get_deal(deal_id)
+        data = response.json()
+        # Если есть ошибки при запросе или сделка уже закрыта
+        # отправляем пользователя на страницу неудачной регистрации
+        if (response.status_code != 200 or not data.get('result') or
+                data.get('error') or data['result']['CLOSED'] == 'Y'):
+            return redirect('reg:reg_error', deal_id=deal_id)
+
         reg_form = self.form_class(request.POST, deal_id=deal_id)
         if reg_form.is_valid():
             form = get_object_or_404(Form, deal_id=deal_id)
@@ -32,6 +41,12 @@ class RegView(View):
             for field in form.fields.all():
                 key = field.bitrix_id
                 value = request.POST.get(field.label)
+                # Записываем значение в поле checkbox
+                if field.field_type == 'checkbox':
+                    if value:
+                        value = 'да'
+                    else:
+                        value = 'нет'
                 if value:
                     fields[key] = value
 

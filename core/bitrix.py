@@ -24,6 +24,15 @@ def request(command, event_id, fields):
     return requests.post(url, json=params)
 
 
+def get_deal(deal_id):
+    """Получает сделку из Битрикс по id."""
+
+    command = 'crm.deal.get'
+    url = WEB_HOOK + command
+    payload = {'id': deal_id}
+    return requests.post(url, json=payload)
+
+
 def create_list(event, name):
     """Создает список name с событием event в Битрикс. Возвращает id списка."""
 

@@ -29,4 +29,4 @@ class RegForm(forms.Form):
                     attrs={'class': 'form-control'}))
             elif field.field_type == 'checkbox':
                 self.fields[field.label] = forms.BooleanField(
-                    widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
+                    required=False, widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
