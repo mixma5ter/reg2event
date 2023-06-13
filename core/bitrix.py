@@ -20,7 +20,14 @@ def request(command, event_id, fields):
         'IBLOCK_CODE': IBLOCK_CODE.format(event_id)
     }
     if fields:
-        params['fields'] = fields
+        params['FIELDS'] = fields
+    # права доступа
+    if command == 'lists.add':
+        params['RIGHTS'] = {
+            'AU': 'R',  # авторизованные пользователи - чтение
+            'CR': 'X',  # создатель - полный доступ
+            'D42': 'W',  # сотрудники отдела - изменение
+        }
     return requests.post(url, json=params)
 
 
