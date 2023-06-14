@@ -4,7 +4,8 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, UpdateView
 
-from core.bitrix import create_list, create_field, delete_list, delete_field, update_list
+from core.bitrix import (check_deal, create_list, create_field,
+                         delete_list, delete_field, update_list)
 from core.paginator import paginator
 from .forms import FormCreateForm, FormUpdateForm
 from .models import Form, Field
@@ -84,13 +85,15 @@ class FormCreateView(LoginRequiredMixin, CreateView):
 
         # Добавляем автора
         form.instance.author = self.request.user
+        # Добавляем название сделки
+        form.instance.deal_title = check_deal(deal_id).get('result')['TITLE']
         # Сохраняем объект Form в БД
         form.save()
         # Получаем id созданной записи
         form_id = form.instance.id
 
         # Создаем список в Битрикс
-        create_list(deal_id, form.instance.title)
+        create_list(deal_id, form.instance.deal_title)
 
         # Создаем базовые поля
         fields = [Field(label=label, field_type=field_type, form_id=form_id, is_active=False) for
