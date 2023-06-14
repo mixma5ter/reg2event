@@ -41,7 +41,7 @@ class RegView(View):
         reg_form = self.form_class(request.POST, deal_id=deal_id)
         if reg_form.is_valid():
             form = get_object_or_404(Form, deal_id=deal_id)
-            fields = {'NAME': 'Регистрация'}
+            fields = {'NAME': form.title}
             for field in form.fields.all():
                 key = field.bitrix_id
                 value = request.POST.get(field.label)
@@ -64,8 +64,9 @@ class RegView(View):
                 return redirect('reg:reg_info', deal_id=deal_id, slug='error')
 
         else:
+            title = get_object_or_404(Form, deal_id=deal_id).title
             context = {
-                'title': self.title,
+                'title': title,
                 'form': reg_form,
                 'errors': reg_form.errors.items()
             }
