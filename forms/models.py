@@ -20,6 +20,11 @@ class Form(CreatedModel):
         verbose_name='ID мероприятия',
         help_text='Введите ID мероприятия'
     )
+    deal_title = models.CharField(
+        max_length=255,
+        verbose_name='Название сделки',
+        help_text='Введите название сделки',
+    )
     author = models.ForeignKey(
         User,
         on_delete=models.SET(getUser),
