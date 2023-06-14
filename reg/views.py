@@ -13,7 +13,6 @@ class RegView(View):
     form_class = RegForm
     template_name = 'reg/reg_form.html'
     context_object_name = 'reg'
-    title = 'Регистрация'
 
     def get(self, request, deal_id):
 
@@ -23,9 +22,10 @@ class RegView(View):
         elif reg_info['closed']:
             return redirect('reg:reg_info', deal_id=deal_id, slug='closed')
 
+        title = get_object_or_404(Form, deal_id=deal_id).title
         reg_form = self.form_class(deal_id=deal_id)
         context = {
-            'title': self.title,
+            'title': title,
             'form': reg_form,
         }
         return render(request, self.template_name, context)
