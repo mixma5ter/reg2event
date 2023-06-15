@@ -208,6 +208,16 @@ a:hover {
   border-radius: 3px;
 }
 
+.form-field input[type="button"] {
+  width: 9.5rem;
+  border: none;
+  background-color: #1e4278;
+}
+
+.form-field input[type="button"]:hover {
+  background-color: #dc6326;
+}
+
 .form-field select {
   width: 12.5rem;
 }

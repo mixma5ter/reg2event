@@ -28,6 +28,8 @@
     <div class="form-field">
       {{ form.deal_id.label_tag }}
       {{ form.deal_id }}
+      <input type="button" class="btn btn-sm" name="check-deal" id="check-deal"
+             value="Проверить ID">
     </div>
     <div class="form-field">
       {{ form.title.label_tag }}
@@ -54,5 +56,6 @@
 </div>
 
 <script type="text/javascript" src="{% static 'js/includes/add_field.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/includes/check_deal.js' %}"></script>
 
 {% endblock %}
