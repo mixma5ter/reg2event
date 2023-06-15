@@ -67,17 +67,6 @@ def create_list(event, name):
     return result.json().get('result')
 
 
-def update_list(event, name):
-    """Обновляет список name с событием event в Битрикс. Возвращает id списка."""
-
-    command = 'lists.update'
-    fields = {
-        'NAME': name,
-    }
-    result = request(command, event, fields)
-    return result.json().get('result')
-
-
 def delete_list(event):
     """Удаляет список event в Битрикс. Возвращает True если удаление удачно."""
 

@@ -4,8 +4,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, UpdateView
 
-from core.bitrix import (check_deal, create_list, create_field,
-                         delete_list, delete_field, update_list)
+from core.bitrix import check_deal, create_list, create_field, delete_list, delete_field
 from core.paginator import paginator
 from .forms import FormCreateForm, FormUpdateForm
 from .models import Form, Field
@@ -161,9 +160,6 @@ class FormUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         """Переопределяем метод формы для сохранения изменений связанных полей поля формы."""
-
-        # Обновляем список в Битрикс
-        update_list(self.object.deal_id, form.instance.title)
 
         # Получаем список всех полей формы
         fields = self.object.fields.all()
