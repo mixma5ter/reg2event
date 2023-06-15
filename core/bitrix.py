@@ -95,6 +95,7 @@ def create_field(event, name):
         'NAME': name,
         'TYPE': 'S',
         'IS_REQUIRED': 'Y',
+        'SORT': 1000,
         'CODE': 'field_{}'.format(translit_name),
     }
     result = request(command, event, fields)
