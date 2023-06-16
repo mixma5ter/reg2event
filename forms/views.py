@@ -150,10 +150,8 @@ class FormUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Добавляем id формы в контекст шаблона
         context['title'] = self.title
         context['form_link'] = self.object.form_link
-        context['stream_link'] = self.object.stream_link
         context['deal_id'] = self.object.deal_id
         context['fields'] = self.object.fields.all().order_by('id')
         return context

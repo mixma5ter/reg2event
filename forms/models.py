@@ -36,6 +36,9 @@ class Form(CreatedModel):
         verbose_name='Название формы',
         help_text='Введите название формы',
     )
+    end_date = models.DateTimeField(
+        verbose_name='Дата окончания регистрации',
+    )
     stream_link = models.CharField(
         max_length=255,
         verbose_name='Ссылка на трансляцию',

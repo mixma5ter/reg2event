@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import DateTimeInput
 from django.http import JsonResponse
 
 from core.bitrix import get_deal
@@ -46,17 +47,25 @@ class FormCreateForm(forms.ModelForm):
 
     class Meta:
         model = Form
-        fields = ('deal_id', 'title', 'stream_link',)
+        fields = ('deal_id', 'title', 'stream_link', 'end_date',)
         help_texts = {
             'deal_id': 'Введите ID мероприятия',
             'title': 'Введите название мероприятия',
             'stream_link': 'Добавьте ссылку на трансляцию',
+            'end_date': 'Укажите дату окончания регистрации',
         }
         labels = {
             'deal_id': 'ID мероприятия',
             'title': 'Название формы',
             'stream_link': 'Ссылка на трансляцию',
+            'end_date': 'Дата окончания регистрации',
         }
+
+    end_date = forms.DateTimeField(
+        input_formats=['%Y-%m-%d %H:%M:%S'],
+        widget=DateTimeInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+        label='Дата окончания регистрации',
+    )
 
     def clean_deal_id(self):
         deal_id = self.cleaned_data['deal_id']
@@ -71,12 +80,20 @@ class FormUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Form
-        fields = ('title', 'stream_link',)
+        fields = ('title', 'stream_link', 'end_date',)
         help_texts = {
             'title': 'Введите название мероприятия',
             'stream_link': 'Добавьте ссылку на трансляцию',
+            'end_date': 'Укажите дату окончания регистрации',
         }
         labels = {
             'title': 'Название формы',
             'stream_link': 'Ссылка на трансляцию',
+            'end_date': 'Дата окончания регистрации',
         }
+
+    end_date = forms.DateTimeField(
+        input_formats=['%Y-%m-%d %H:%M:%S'],
+        widget=DateTimeInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+        label='Дата окончания регистрации',
+    )
