@@ -1,7 +1,8 @@
 from django.shortcuts import get_object_or_404, render, redirect
+from django.utils import timezone
 from django.views import View
 
-from core.bitrix import check_deal, create_element
+from core.bitrix import create_element
 from forms.models import Form
 from reg.forms import RegForm
 
@@ -16,13 +17,14 @@ class RegView(View):
 
     def get(self, request, deal_id):
 
-        reg_info = check_deal(deal_id)
-        if reg_info['errors']:
-            return redirect('reg:reg_info', deal_id=deal_id, slug='error')
-        elif reg_info['closed']:
+        form_obj = get_object_or_404(Form, deal_id=deal_id)
+
+        # проверяем дату окончания регистрации
+        now = timezone.now()
+        if form_obj.end_date < now:
             return redirect('reg:reg_info', deal_id=deal_id, slug='closed')
 
-        title = get_object_or_404(Form, deal_id=deal_id).title
+        title = form_obj.title
         reg_form = self.form_class(deal_id=deal_id)
         context = {
             'title': title,
@@ -32,10 +34,11 @@ class RegView(View):
 
     def post(self, request, deal_id):
 
-        reg_info = check_deal(deal_id)
-        if reg_info['errors']:
-            return redirect('reg:reg_info', deal_id=deal_id, slug='error')
-        elif reg_info['closed']:
+        form_obj = get_object_or_404(Form, deal_id=deal_id)
+
+        # проверяем дату окончания регистрации
+        now = timezone.now()
+        if form_obj.end_date < now:
             return redirect('reg:reg_info', deal_id=deal_id, slug='closed')
 
         reg_form = self.form_class(request.POST, deal_id=deal_id)
