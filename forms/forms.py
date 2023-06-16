@@ -42,41 +42,8 @@ def check_deal_ajax(request, deal_id):
     return JsonResponse({'value': result.get('value'), 'message': result.get('message')})
 
 
-class FormCreateForm(forms.ModelForm):
-    """Форма добавляет новую форму в БД."""
-
-    class Meta:
-        model = Form
-        fields = ('deal_id', 'title', 'stream_link', 'end_date',)
-        help_texts = {
-            'deal_id': 'Введите ID мероприятия',
-            'title': 'Введите название мероприятия',
-            'stream_link': 'Добавьте ссылку на трансляцию',
-            'end_date': 'Укажите дату окончания регистрации',
-        }
-        labels = {
-            'deal_id': 'ID мероприятия',
-            'title': 'Название формы',
-            'stream_link': 'Ссылка на трансляцию',
-            'end_date': 'Дата окончания регистрации',
-        }
-
-    end_date = forms.DateTimeField(
-        input_formats=['%Y-%m-%d %H:%M:%S'],
-        widget=DateTimeInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
-        label='Дата окончания регистрации',
-    )
-
-    def clean_deal_id(self):
-        deal_id = self.cleaned_data['deal_id']
-        result = check_deal(deal_id)
-        if not result.get('value'):
-            raise forms.ValidationError(result.get('message'))
-        return deal_id
-
-
-class FormUpdateForm(forms.ModelForm):
-    """Форма изменяет форму в БД."""
+class BaseFormMixin(forms.ModelForm):
+    """Базовый класс формы."""
 
     class Meta:
         model = Form
@@ -97,3 +64,30 @@ class FormUpdateForm(forms.ModelForm):
         widget=DateTimeInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
         label='Дата окончания регистрации',
     )
+
+    def clean_deal_id(self):
+        deal_id = self.cleaned_data['deal_id']
+        result = check_deal(deal_id)
+        if not result.get('value'):
+            raise forms.ValidationError(result.get('message'))
+        return deal_id
+
+
+class FormCreateForm(BaseFormMixin, forms.ModelForm):
+    """Форма добавляет новую форму в БД."""
+
+    class Meta(BaseFormMixin.Meta):
+        fields = ('deal_id',) + BaseFormMixin.Meta.fields
+        help_texts = {
+            'deal_id': 'Введите ID мероприятия',
+        }
+        labels = {
+            'deal_id': 'ID мероприятия',
+        }
+
+
+class FormUpdateForm(BaseFormMixin, forms.ModelForm):
+    """Форма изменяет форму в БД."""
+
+    class Meta(BaseFormMixin.Meta):
+        pass  # используем все поля и подписи из BaseFormMixin.Meta
