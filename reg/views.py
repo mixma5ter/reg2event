@@ -1,12 +1,15 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.http import require_http_methods
 
 from core.bitrix import create_element
 from forms.models import Form
 from reg.forms import RegForm
 
 
+@method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
 class RegView(View):
     """Страница регистрации пользователей на мероприятие."""
 
@@ -15,13 +18,19 @@ class RegView(View):
     template_name = 'reg/reg_form.html'
     context_object_name = 'reg'
 
+    def get_form_obj(self, deal_id):
+        return get_object_or_404(Form, deal_id=deal_id)
+
+    def check_end_date(self, form_obj):
+        """Проверка даты окончания регистрации."""
+        if form_obj.end_date < timezone.now():
+            return True
+        return False
+
     def get(self, request, deal_id):
-
-        form_obj = get_object_or_404(Form, deal_id=deal_id)
-
-        # проверяем дату окончания регистрации
-        now = timezone.now()
-        if form_obj.end_date < now:
+        # Проверка даты окончания регистрации
+        form_obj = self.get_form_obj(deal_id)
+        if self.check_end_date(form_obj):
             return redirect('reg:reg_info', deal_id=deal_id, slug='closed')
 
         title = form_obj.title
@@ -33,18 +42,17 @@ class RegView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, deal_id):
-
-        form_obj = get_object_or_404(Form, deal_id=deal_id)
-
-        # проверяем дату окончания регистрации
-        now = timezone.now()
-        if form_obj.end_date < now:
+        # Проверка даты окончания регистрации
+        form_obj = self.get_form_obj(deal_id)
+        if self.check_end_date(form_obj):
             return redirect('reg:reg_info', deal_id=deal_id, slug='closed')
 
         reg_form = self.form_class(request.POST, deal_id=deal_id)
         if reg_form.is_valid():
             form = get_object_or_404(Form, deal_id=deal_id)
+
             fields = {'NAME': form.title}
+
             for field in form.fields.all():
                 key = field.bitrix_id
                 value = request.POST.get(field.label)
@@ -57,47 +65,39 @@ class RegView(View):
                 if value:
                     fields[key] = value
 
-            # Создание нового элемента в Битрикс TODO
-            session = request.session.session_key
-
-            response = create_element(deal_id, session, fields)
+            response = create_element(deal_id, fields)
             if response.ok:
                 return redirect('reg:reg_info', deal_id=deal_id, slug='success')
             else:
                 return redirect('reg:reg_info', deal_id=deal_id, slug='error')
 
-        else:
-            title = get_object_or_404(Form, deal_id=deal_id).title
-            context = {
-                'title': title,
-                'form': reg_form,
-                'errors': reg_form.errors.items()
-            }
-            return render(request, self.template_name, context)
+        title = self.get_form_obj(deal_id).title
+        context = {
+            'title': title,
+            'form': reg_form,
+            'errors': reg_form.errors.items()
+        }
+        return render(request, self.template_name, context)
 
 
+@method_decorator(require_http_methods(['GET']), name='dispatch')
 class RegInfoView(View):
     """Страница информации о регистрации."""
 
-    model = Form
     template_name = 'reg/reg_info.html'
-    context_object_name = 'reg'
 
     def get(self, request, deal_id, slug):
-        title = 'Регистрация прошла успешно'
-        stream_link = get_object_or_404(Form, deal_id=deal_id).stream_link
-        new_reg = True
-
-        if slug == 'closed':
-            title = 'Регистрация закрыта'
-            new_reg = False
-        elif slug == 'error':
-            title = 'Возникла ошибка при регистрации'
-            stream_link = None
+        form = get_object_or_404(Form, deal_id=deal_id)
+        stream_link = form.stream_link if slug != 'error' else None
+        new_reg = True if slug != 'closed' else False
 
         context = {
             'deal_id': deal_id,
-            'title': title,
+            'title': {
+                'success': 'Регистрация прошла успешно',
+                'closed': 'Регистрация закрыта',
+                'error': 'Возникла ошибка при регистрации'
+            }.get(slug, 'Регистрация прошла успешно'),
             'stream_link': stream_link,
             'new_reg': new_reg,
         }

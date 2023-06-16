@@ -30,7 +30,7 @@ class IndexView(LoginRequiredMixin, ListView):
     paginate_by = CARDS_ON_INDEX_PAGE
 
     def get_queryset(self):
-        return Form.objects.order_by('-pub_date')
+        return super().get_queryset().order_by('-pub_date')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -47,9 +47,9 @@ class FormsListView(LoginRequiredMixin, ListView):
     title = 'Формы регистраций'
 
     def get_queryset(self):
-        return Form.objects.order_by('-pub_date')
+        return super().get_queryset().order_by('-pub_date')
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = self.title
         context['page_obj'], context['page_numbers'] = paginator(self.request, self.get_queryset())
@@ -75,8 +75,8 @@ class FormCreateView(LoginRequiredMixin, CreateView):
         deal_id = form.cleaned_data['deal_id']
         # Проверяем, есть ли запись в БД с таким deal_id
         if Form.objects.filter(deal_id=deal_id).exists():
-            massage_template = 'Форма с ID мероприятия {} уже существует!'
-            messages.warning(self.request, massage_template.format(deal_id))
+            message_template = 'Форма с ID мероприятия {} уже существует!'
+            messages.warning(self.request, message_template.format(deal_id))
             return super().form_invalid(form)
 
         # Конструктор ссылки на страницу регистрации
@@ -147,6 +147,7 @@ class FormUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'forms/form_update.html'
     context_object_name = 'form'
     title = 'Форма регистрации'
+    success_url = reverse_lazy('forms:form_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -188,6 +189,3 @@ class FormUpdateView(LoginRequiredMixin, UpdateView):
             return redirect('forms:form_list')
         else:
             return super().post(request, *args, **kwargs)
-
-    def get_success_url(self):
-        return reverse_lazy('forms:form_list')
