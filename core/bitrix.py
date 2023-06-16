@@ -83,7 +83,7 @@ def create_field(event, name):
     fields = {
         'NAME': name,
         'TYPE': 'S',
-        'IS_REQUIRED': 'Y',
+        'IS_REQUIRED': 'N',
         'SORT': 1000,
         'CODE': 'field_{}'.format(translit_name),
     }

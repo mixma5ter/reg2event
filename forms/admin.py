@@ -3,30 +3,22 @@ from django.contrib import admin
 from .models import Form, Field, FieldChoice
 
 
-class MyAdmin(admin.ModelAdmin):
-    """Переопределение общих параметров для всех моделей админки."""
+@admin.register(Form)
+class FormAdmin(admin.ModelAdmin):
+    """Регистрация модели формы в админке."""
 
     save_on_top = True
     list_select_related = True
     empty_value_display = '-пусто-'
-
-    class Meta:
-        abstract = True
-
-
-@admin.register(Form)
-class FormAdmin(MyAdmin):
-    """Регистрация модели формы в админке."""
-
     list_display = (
         'pk',
         'deal_id',
         'author',
         'title',
         'deal_title',
-        'end_date',
-        'stream_link',
         'form_link',
+        'stream_link',
+        'end_date',
         'pub_date',
         'update_date',
     )
@@ -36,9 +28,12 @@ class FormAdmin(MyAdmin):
 
 
 @admin.register(Field)
-class FieldAdmin(MyAdmin):
+class FieldAdmin(admin.ModelAdmin):
     """Регистрация модели поля формы в админке."""
 
+    save_on_top = True
+    list_select_related = True
+    empty_value_display = '-пусто-'
     list_display = (
         'pk',
         'label',
@@ -55,9 +50,12 @@ class FieldAdmin(MyAdmin):
 
 
 @admin.register(FieldChoice)
-class FieldChoiceAdmin(MyAdmin):
+class FieldChoiceAdmin(admin.ModelAdmin):
     """Регистрация модели поля выбора в админке."""
 
+    save_on_top = True
+    list_select_related = True
+    empty_value_display = '-пусто-'
     list_display = (
         'pk',
         'field',

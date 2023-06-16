@@ -6,8 +6,7 @@ from forms.models import Form
 
 
 class RegForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        deal_id = kwargs.pop('deal_id')
+    def __init__(self, *args, deal_id, **kwargs):
         super().__init__(*args, **kwargs)
         reg_form = get_object_or_404(Form, deal_id=deal_id)
         active_fields = reg_form.fields.filter(is_active=True).order_by('pk')
