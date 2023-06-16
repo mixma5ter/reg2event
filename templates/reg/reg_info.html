@@ -10,7 +10,9 @@
   <h1 class="text-center">{{ title }}</h1>
 </div>
 
-{% include "forms/includes/massages.html" %}
+<div class="container">
+  {% include "forms/includes/massages.html" %}
+</div>
 
 {% if stream_link %}
 <div class="container py-2 text-center">
@@ -26,7 +28,7 @@
 {% if new_reg %}
 <div class="container py-2 text-center">
   <a href="{% url 'reg:reg_form' deal_id=deal_id %}"
-     class="col-4 me-4 btn btn-lg btn-outline-primary">
+     class="col-4 btn btn-lg btn-outline-primary">
     Новая регистрация
   </a>
 </div>

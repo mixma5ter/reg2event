@@ -1,10 +1,14 @@
-<!-- templates/core/403csrf.html -->
 {% extends "base.html" %}
 
 {% block title %}CSRF check error{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-  <h1 class="text-center">Отказано в доступе</h1>
+<div class="container py-5 text-center">
+  <h1>Ошибка авторизации</h1>
+  <p>Попробуйте авторизоваться позже</p>
+  <div class="p-4"></div>
+  <a href="{% url 'forms:index' %}" class="col-4 btn btn-lg btn-outline-primary">
+    На главную
+  </a>
 </div>
 {% endblock %}
