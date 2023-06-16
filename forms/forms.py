@@ -59,6 +59,12 @@ class BaseFormMixin(forms.ModelForm):
             'end_date': 'Дата окончания регистрации',
         }
 
+    stream_link = forms.URLField(
+        required=False,
+        label='Ссылка на трансляцию',
+        help_text='Введите ссылку на трансляцию',
+    )
+
     end_date = forms.DateTimeField(
         input_formats=['%Y-%m-%d %H:%M:%S'],
         widget=DateTimeInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),

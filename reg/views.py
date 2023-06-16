@@ -83,8 +83,6 @@ class RegInfoView(View):
     def get(self, request, deal_id, slug):
         title = 'Регистрация прошла успешно'
         stream_link = get_object_or_404(Form, deal_id=deal_id).stream_link
-        if not stream_link.startswith('http'):
-            stream_link = 'https://' + stream_link + '/'
         new_reg = True
 
         if slug == 'closed':
