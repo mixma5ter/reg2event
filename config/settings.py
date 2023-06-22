@@ -19,7 +19,12 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['192.168.64.26', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = [
+    os.getenv('REMOTE_HOST'),
+    os.getenv('LOCAL_HOST'),
+    '127.0.0.1',
+    'localhost'
+]
 WEB_HOOK = os.getenv('BITRIX_WEB_HOOK')
 
 # Application definition
