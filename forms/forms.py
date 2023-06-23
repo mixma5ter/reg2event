@@ -32,7 +32,8 @@ def check_deal(deal_id):
         return {'value': False, 'message': 'Ошибка запроса к Битрикс! Проверьте ID мероприятия!'}
 
     # При успешной валидации, выводим название сделки
-    return {'value': True, 'message': data['result']['TITLE']}
+    message = data['result']['TITLE']
+    return {'value': True, 'message': message}
 
 
 def check_deal_ajax(request, deal_id):
