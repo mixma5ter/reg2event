@@ -20,6 +20,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = False
 
 ALLOWED_HOSTS = [
+    os.getenv('DOMAIN_NAME'),
     os.getenv('REMOTE_HOST'),
     os.getenv('LOCAL_HOST'),
     '127.0.0.1',
