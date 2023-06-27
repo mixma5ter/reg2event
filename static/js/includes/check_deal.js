@@ -6,7 +6,7 @@ checkButton.addEventListener('click', function () {
     let dealId = dealInput.value;
 
     // отправляем AJAX-запрос на сервер для проверки deal_id
-    fetch(`/forms/check_deal/${dealId}/`)
+    fetch(`/events/forms/check_deal/${dealId}/`)
         .then(response => response.json())
         .then(data => {
             if (data.value) {

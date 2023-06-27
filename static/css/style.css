@@ -63,6 +63,7 @@ a:hover {
 }
 
 .btn-lg {
+  min-width: 160px;
   max-width: 200px;
 }
 
