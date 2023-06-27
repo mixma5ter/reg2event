@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, UpdateView
 
+from config.settings import DOMAIN_NAME
 from core.bitrix import check_deal, create_list, create_field, delete_list, delete_field
 from core.paginator import paginator
 from .forms import FormCreateForm, FormUpdateForm
@@ -152,6 +153,7 @@ class FormUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = self.title
+        context['domain_name'] = DOMAIN_NAME
         context['form_link'] = self.object.form_link
         context['deal_id'] = self.object.deal_id
         context['fields'] = self.object.fields.all().order_by('id')
