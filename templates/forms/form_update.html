@@ -29,8 +29,8 @@
     <div class="form-field">
       <label>Ссылка на форму:</label>
       <h4><a href="{{ form_link }}">https://{{ domain_name }}{{ form_link }}</a></h4>
-      <button type="button" class="btn btn-sm btn-outline-primary"
-              onclick="copyToClipboard('https://{{ domain_name }}{{ form_link }}')">Копировать</button>
+      <button type="button" class="btn btn-sm btn-outline-primary" id="copy-button"
+              onclick="copyToClipboard('https://{{ domain_name }}{{ form_link }}')">Копировать ссылку</button>
     </div>
     <div class="form-field">
       <label>ID мероприятия:</label>
@@ -80,12 +80,22 @@
 
 <script>
   function copyToClipboard(text) {
+    var button = document.getElementById('copy-button');
+    var buttonText = button.innerHTML;
+    button.innerHTML = 'Ссылка скопирована';
+    button.disabled = true;
+
     var input = document.createElement('input');
     input.setAttribute('value', text);
     document.body.appendChild(input);
     input.select();
     document.execCommand('copy');
     document.body.removeChild(input);
+
+    setTimeout(function() {
+      button.innerHTML = buttonText;
+      button.disabled = false;
+    }, 3000); // возвращаем текст кнопки через 3 секунды
   }
 </script>
 
