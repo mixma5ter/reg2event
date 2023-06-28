@@ -15,6 +15,10 @@ def check_deal(deal_id):
     if len(str(deal_id)) > MAX_VALUE:
         return {'value': False, 'message': 'Слишком большое значение ID мероприятия!'}
 
+    # Проверяем, есть ли запись в БД с таким deal_id
+    if Form.objects.filter(deal_id=deal_id).exists():
+        return {'value': False, 'message': f'Форма с ID мероприятия {deal_id} уже существует!'}
+
     # Проверяем, есть ли сделка в Битрикс с таким deal_id
     response = get_deal(deal_id)
     data = response.json()
@@ -26,7 +30,7 @@ def check_deal(deal_id):
     # Проверяем статус сделки
     is_closed_str = data['result']['CLOSED']
     if is_closed_str == 'Y':
-        return {'value': False, 'message': 'Сделка с ID {} уже закрыта!'.format(deal_id)}
+        return {'value': False, 'message': f'Сделка с ID {deal_id} уже закрыта!'}
 
     if response.status_code != 200:
         return {'value': False, 'message': 'Ошибка запроса к Битрикс! Проверьте ID мероприятия!'}
