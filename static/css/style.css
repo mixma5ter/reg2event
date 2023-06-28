@@ -8,6 +8,8 @@ body {
   font-family: Arial, sans-serif;
   color: #0f2853;
   background-color: #e7e7e7;
+  word-break: break-word;
+  min-width: 300px;
 }
 
 header {
@@ -103,7 +105,7 @@ a:hover {
 }
 
 .card {
-  width: 30%;
+  max-width: 290px;
   background-color: #cfcfcf;
   box-shadow: 4px 4px 8px 0 rgba(34, 60, 80, 0.2);
   margin: 15px 15px 30px;
@@ -139,7 +141,6 @@ a:hover {
 }
 
 .card-inline {
-  width: 100%;
   color: #414142;
   background-color: #cfcfcf;
   margin: 1% 0;
@@ -249,4 +250,33 @@ input[type="number"]::-webkit-outer-spin-button {
 input:focus {
   outline: none;
   border: 2px solid grey;
+}
+
+@media (max-width: 1000px) {
+  .s-device {
+    display: none;
+  }
+
+  .container,
+  .container-md,
+  .container-sm {
+    max-width: 640px;
+  }
+}
+
+@media (max-width: 800px) {
+  .xs-device {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .xxs-device {
+    display: none;
+  }
+
+  .container {
+    max-width: 320px;
+    justify-content: center;
+  }
 }

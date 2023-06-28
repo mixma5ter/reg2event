@@ -1,20 +1,20 @@
 {% load static %}
 
-<div class="d-flex flex-wrap justify-content-center container py-4">
+<div class="d-flex flex-wrap container py-4">
   <a href="https://mcko.ru/"
-     class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+     class="d-flex align-items-center mb-md-0 me-md-auto text-dark text-decoration-none">
     <img src="{% static 'img/mcko_logo_250_250.png' %}"
          width="100"
          height="100"
          class="bi me-2"
          alt="">
-    <span class="fs-4">МОСКОВСКИЙ ЦЕНТР<br>КАЧЕСТВА ОБРАЗОВАНИЯ</span>
+    <span class="xxs-device fs-4">МОСКОВСКИЙ ЦЕНТР<br>КАЧЕСТВА ОБРАЗОВАНИЯ</span>
   </a>
 
-  <div class="align-self-center text-end">
+  <div class="xs-device align-self-center text-end">
     {% if user.is_authenticated %}
-      <h3 class="card-title">{{ user.first_name }} {{ user.last_name }}</h3>
-      <a href="{% url 'users:logout' %}" class="btn btn-sm btn-outline-primary">Выйти</a>
+    <h3 class="s-device card-title">{{ user.first_name }} {{ user.last_name }}</h3>
+    <a href="{% url 'users:logout' %}" class="btn btn-sm btn-outline-primary">Выйти</a>
     {% endif %}
   </div>
 </div>

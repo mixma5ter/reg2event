@@ -1,29 +1,27 @@
 {% load static %}
 
 <div class="card-inline">
-  <div class="col-12 align-center">
-    <div class="row p-3">
-      <div class="col-1">
-        ID:<br><b>{{ card.deal_id }}</b>
-      </div>
-      <div class="col-4">
-        Название:<br><b>{{ card.title }}</b>
-      </div>
-      <div class="col-3">
-        Создал:<br><b>{{ card.author.first_name }} {{ card.author.last_name }}</b>
-      </div>
-      <div class="col-3">
-        Дата создания:<br><b>{{ card.pub_date }}</b>
-      </div>
-      <div class="col-1 d-flex align-items-center">
-        <a href="{% url 'forms:form_update' pk=card.id %}" class="btn btn-arrow">
-          <svg src="{% static 'img/arrow-right.svg' %}" width="24" height="24" fill="white"
-               class="bi bi-arrow-right" viewBox="0 0 16 14">
-            <path fill-rule="evenodd"
-                  d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-          </svg>
-        </a>
-      </div>
+  <div class="row p-3">
+    <div class="xxs-device col-2">
+      ID:<br><b>{{ card.deal_id }}</b>
+    </div>
+    <div class="col">
+      Название:<br><b>{{ card.title }}</b>
+    </div>
+    <div class="xs-device col">
+      Создал:<br><b>{{ card.author.first_name }} {{ card.author.last_name }}</b>
+    </div>
+    <div class="s-device col">
+      Дата создания:<br><b>{{ card.pub_date }}</b>
+    </div>
+    <div class="col-auto d-flex align-items-center">
+      <a href="{% url 'forms:form_update' pk=card.id %}" class="btn btn-arrow">
+        <svg src="{% static 'img/arrow-right.svg' %}" width="24" height="24" fill="white"
+             class="bi bi-arrow-right" viewBox="0 0 16 14">
+          <path fill-rule="evenodd"
+                d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+        </svg>
+      </a>
     </div>
   </div>
 </div>

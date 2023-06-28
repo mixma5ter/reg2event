@@ -15,10 +15,10 @@
   <div id="alert-messages"></div>
   {% include "forms/includes/massages.html" %}
 
-  <a href="{% url 'forms:index' %}" class="col-4 me-4 btn btn-lg btn-outline-primary">
+  <a href="{% url 'forms:index' %}" class="col-4 me-4 mb-4 btn btn-lg btn-outline-primary">
     На главную
   </a>
-  <a href="{% url 'forms:form_list' %}" class="col-4 me-4 btn btn-lg btn-outline-primary">
+  <a href="{% url 'forms:form_list' %}" class="col-4 me-4 mb-4 btn btn-lg btn-outline-primary">
     Все формы
   </a>
 </div>
@@ -52,10 +52,11 @@
     {% endfor %}
 
     <div id="fields"></div>
-    <button type="button" class="col-4 me-4 btn btn-lg btn-outline-primary" id="add-field">Добавить
+    <button type="button" class="col-4 me-4 mb-4 btn btn-lg btn-outline-primary" id="add-field">
+      Добавить
       поле
     </button>
-    <button type="submit" class="col-4 me-4 btn btn-lg btn-outline-primary">Создать</button>
+    <button type="submit" class="col-4 me-4 mb-4 btn btn-lg btn-outline-primary">Создать</button>
 
   </form>
 </div>
