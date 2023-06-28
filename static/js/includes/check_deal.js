@@ -6,10 +6,20 @@ let alertMessages = document.getElementById('alert-messages');
 checkButton.addEventListener('click', function () {
     let dealId = dealInput.value;
 
+    // создаем элемент div для индикатора ожидания
+    let loaderDiv = document.createElement('div');
+    loaderDiv.classList.add('loader');
+
+    // добавляем индикатор ожидания поверх всего контента
+    document.body.appendChild(loaderDiv);
+
     // отправляем AJAX-запрос на сервер для проверки deal_id
     fetch(`/events/forms/check_deal/${dealId}/`)
         .then(response => response.json())
         .then(data => {
+            // удаляем индикатор ожидания
+            loaderDiv.remove();
+
             // создаем элемент div для сообщения
             let messageDiv = document.createElement('div');
 
