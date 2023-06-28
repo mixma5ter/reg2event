@@ -1,5 +1,4 @@
 from django import forms
-from django.forms import DateTimeInput
 from django.http import JsonResponse
 
 from core.bitrix import get_deal
@@ -71,8 +70,8 @@ class BaseFormMixin(forms.ModelForm):
     )
 
     end_date = forms.DateTimeField(
-        input_formats=['%Y-%m-%d %H:%M:%S'],
-        widget=DateTimeInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+        input_formats=['%Y-%m-%d %H:%M'],
+        widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
         label='Дата окончания регистрации',
     )
 
