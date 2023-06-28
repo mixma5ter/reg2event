@@ -23,24 +23,26 @@ class Command(BaseCommand):
         uploaded = 0
 
         for _ in range(8):
-            try:
-                deal_id = str(uuid.uuid1().int)[:random.randrange(4, 6)]
-                Form.objects.get_or_create(
-                    deal_id=deal_id,
-                    author=random.choice(User.objects.all()),
-                    title=template,
-                    form_link=f'/reg/{deal_id}',
-                    stream_link=f'http://example.stream.link.com',
-                )
-                form_id = Form.objects.latest('id').pk
-                fields = [
-                    Field(label=label, field_type=field_type, form_id=form_id,
-                          is_active=random.choice(['True', 'False'])) for
-                    field_data in BASIC_FIELDS for label, field_type in field_data.items()]
-                Field.objects.bulk_create(fields)
-                uploaded += 1
-            except:
-                pass
+            # try:
+            deal_id = str(uuid.uuid1().int)[:random.randrange(4, 6)]
+            Form.objects.get_or_create(
+                deal_id=deal_id,
+                deal_title=template,
+                author=random.choice(User.objects.all()),
+                title=template,
+                end_date='2023-06-30 12:00',
+                form_link=f'/events/reg/{deal_id}',
+                stream_link=f'http://example.stream.link.com',
+            )
+            form_id = Form.objects.latest('id').pk
+            fields = [
+                Field(label=label, field_type=field_type, form_id=form_id,
+                      is_active=random.choice(['True', 'False'])) for
+                field_data in BASIC_FIELDS for label, field_type in field_data.items()]
+            Field.objects.bulk_create(fields)
+            uploaded += 1
+            # except:
+            #     pass
 
         message = f'\nЗагружено - {uploaded} форм.'
 
