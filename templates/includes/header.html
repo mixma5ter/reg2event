@@ -11,10 +11,16 @@
     <span class="xxs-device fs-4">МОСКОВСКИЙ ЦЕНТР<br>КАЧЕСТВА ОБРАЗОВАНИЯ</span>
   </a>
 
-  <div class="xs-device align-self-center text-end">
-    {% if user.is_authenticated %}
-    <h3 class="s-device card-title">{{ user.first_name }} {{ user.last_name }}</h3>
-    <a href="{% url 'users:logout' %}" class="btn btn-sm btn-outline-primary">Выйти</a>
-    {% endif %}
+  {% if user.is_authenticated %}
+
+  <div class="ms-auto align-self-center">
+    <a href="{% url 'users:logout' %}" class="logout-button"></a>
+
+    <div class="s-device align-self-center text-end">
+      <h3 class="card-title">{{ user.first_name }} {{ user.last_name }}</h3>
+      <a href="{% url 'users:logout' %}" class="btn btn-sm btn-outline-primary">Выйти</a>
+    </div>
   </div>
+
+  {% endif %}
 </div>
