@@ -295,7 +295,7 @@ input:focus {
 .logout-button::after {
   content: '';
   position: absolute;
-  top: 8px;
+  top: 18px;
   width: 80%;
   height: 2px;
   background-color: gray;
