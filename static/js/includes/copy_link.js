@@ -1,10 +1,10 @@
 function copyToClipboard(text) {
-    var button = document.getElementById('copy-button');
-    var buttonText = button.innerHTML;
+    const button = document.getElementById('copy-button');
+    const buttonText = button.innerHTML;
     button.innerHTML = 'Ссылка скопирована';
     button.disabled = true;
 
-    var input = document.createElement('input');
+    const input = document.createElement('input');
     input.setAttribute('value', text);
     document.body.appendChild(input);
     input.select();

@@ -1,9 +1,12 @@
-$(document).ready(function () {
-    var count = 0;
-    var maxFields = 2;
-    $("#add-field").on("click", function () {
+document.addEventListener('DOMContentLoaded', function () {
+    let count = 0;
+    let maxFields = 2;
+    let addFieldButton = document.getElementById('add-field');
+    let fieldsContainer = document.getElementById('fields');
+
+    addFieldButton.addEventListener('click', function () {
         if (count < maxFields) {
-            var fieldHtml = `
+            let fieldHtml = `
                 <div class="form-field">
                     <label for="custom-${count}-input">Название поля:</label>
                     <input type="text" name="custom_field-${count}-label" required id="custom-${count}-input">
@@ -20,18 +23,21 @@ $(document).ready(function () {
                     <hr>
                 </div>
             `;
-            $("#fields").append(fieldHtml);
+            fieldsContainer.insertAdjacentHTML('beforeend', fieldHtml);
             count++;
             if (count === maxFields) {
-                $("#add-field").prop("disabled", true);
+                addFieldButton.disabled = true;
             }
         }
     });
-    $("#fields").on("click", ".remove-field-btn", function () {
-        $(this).parent().remove();
-        count--;
-        if (count < maxFields) {
-            $("#add-field").prop("disabled", false);
+
+    fieldsContainer.addEventListener('click', function (event) {
+        if (event.target.classList.contains('remove-field-btn')) {
+            event.target.parentNode.remove();
+            count--;
+            if (count < maxFields) {
+                addFieldButton.disabled = false;
+            }
         }
     });
 });

@@ -1,8 +1,8 @@
-$(function() {
-    var message = $('.alert');
-    if (message.length) {
-        setTimeout(function() {
-            message.alert('close');
-        }, 5000);
+document.addEventListener('DOMContentLoaded', function () {
+    const message = document.querySelector('.alert');
+    if (message) {
+        setTimeout(function () {
+            message.remove();
+        }, 3000);
     }
 });
