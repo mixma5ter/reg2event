@@ -6,6 +6,11 @@ let alertMessages = document.getElementById('alert-messages');
 checkButton.addEventListener('click', function () {
     let dealId = dealInput.value;
 
+    // Проверяем, является ли `dealId` числом
+    if (!dealId) {
+        return; // Прекращаем выполнение функции
+    }
+
     // создаем элемент div для индикатора ожидания
     let loaderDiv = document.createElement('div');
     loaderDiv.classList.add('loader');
@@ -42,4 +47,8 @@ checkButton.addEventListener('click', function () {
             }, 3000);
         })
         .catch(err => console.error(err));
+
+    setTimeout(function () {
+        loaderDiv.remove();
+    }, 5000);
 });

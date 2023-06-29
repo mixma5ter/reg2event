@@ -10,4 +10,9 @@ form.addEventListener('submit', function () {
     const loader = document.createElement('div');
     loader.classList.add('loader');
     button.appendChild(loader);
+
+    // Удаляем loader через 5 секунд
+    setTimeout(function () {
+        loader.remove();
+    }, 5000);
 });
