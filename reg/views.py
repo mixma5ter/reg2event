@@ -65,11 +65,8 @@ class RegView(View):
                 if value:
                     fields[key] = value
 
-            response = create_element(deal_id, fields)
-            if response.ok:
-                return redirect('reg:reg_info', deal_id=deal_id, slug='success')
-            else:
-                return redirect('reg:reg_info', deal_id=deal_id, slug='error')
+            create_element(deal_id, fields)
+            return redirect('reg:reg_info', deal_id=deal_id, slug='success')
 
         title = self.get_form_obj(deal_id).title
         context = {
