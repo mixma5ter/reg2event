@@ -210,6 +210,11 @@ a:hover {
   border-radius: 3px;
 }
 
+.form-field textarea {
+  height: 10rem;
+  border: 2px solid #ccc;
+}
+
 .form-field input[type="button"] {
   width: 9.5rem;
   border: none;

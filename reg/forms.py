@@ -1,8 +1,21 @@
 from django import forms
-from django.forms import EmailInput, TextInput
+from django.forms import EmailInput, Textarea, TextInput
 from django.shortcuts import get_object_or_404
 
 from forms.models import Form
+
+
+class CustomTextarea(forms.CharField):
+    widget = Textarea
+
+    def validate(self, value):
+        super().validate(value)
+        text_length = len(value.strip())
+        if self.max_length is not None and text_length > self.max_length:
+            raise forms.ValidationError(
+                f"Убедитесь, что это текст содержит не более {self.max_length} символов "
+                f"(сейчас {text_length})."
+            )
 
 
 class RegForm(forms.Form):
@@ -16,10 +29,10 @@ class RegForm(forms.Form):
                     max_length=100,
                     widget=TextInput(attrs={'class': 'form-control'}))
             elif field.field_type == 'textarea':
-                self.fields[field.label] = forms.CharField(
-                    max_length=255,
+                self.fields[field.label] = CustomTextarea(
+                    max_length=955,
                     required=False,
-                    widget=TextInput(attrs={'class': 'form-control'}))
+                    widget=Textarea(attrs={'class': 'form-control'}))
             elif field.field_type == 'number':
                 self.fields[field.label] = forms.IntegerField(
                     widget=TextInput(attrs={'class': 'form-control'}))
