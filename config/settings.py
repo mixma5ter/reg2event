@@ -2,7 +2,6 @@
 Django settings for config project.
 """
 
-import logging
 import os
 from dotenv import load_dotenv
 
@@ -167,33 +166,4 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
-}
-
-# Настройки логирования
-LOG_FILE = os.path.join(BASE_DIR, 'logs', 'app.log')
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'ERROR',  # Уровень логирования (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-            'class': 'logging.FileHandler',
-            'filename': LOG_FILE,
-            'formatter': 'verbose',
-        },
-    },
-    'loggers': {
-        '': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
-    'formatters': {
-        'verbose': {
-            'format': '{asctime} {levelname} [{name}:{lineno}] {message}',
-            'style': '{',
-        },
-    },
 }
