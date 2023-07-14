@@ -1,13 +1,8 @@
 {% for label, type in field.items %}
 <div class="form-field form-field-checkbox">
   <label for="id_{{ label }}">{{ label }}:</label>
-  {% if label == "ФИО" %}
   <input class="form-check-input" type="checkbox" name="field-{{ type }}-{{ label }}"
-         id="id_{{ label }}" checked>
-  {% else %}
-  <input class="form-check-input" type="checkbox" name="field-{{ type }}-{{ label }}"
-         id="id_{{ label }}">
-  {% endif %}
+         id="id_{{ label }}" {% if forloop.parentloop.counter <= 3 %}checked{% endif %}>
 </div>
 <hr class="form-field">
 {% endfor %}

@@ -12,7 +12,9 @@ from .models import Form, Field
 
 CARDS_ON_INDEX_PAGE = 6
 BASIC_FIELDS = [
-    {'ФИО': 'text'},
+    {'Фамилия': 'text'},
+    {'Имя': 'text'},
+    {'Отчество': 'text'},
     {'Организация': 'text'},
     {'Должность': 'text'},
     {'Почта': 'email'},
