@@ -48,7 +48,13 @@
     <hr class="form-field">
 
     {% for field in basic_fields %}
-    {% include "forms/includes/basic_field.html" %}
+    <div class="form-field form-field-checkbox">
+      <label for="id_{{ field.label }}">{{ field.label }}:</label>
+      <input class="form-check-input" type="checkbox"
+             name="field-{{ field.field_type }}-{{ field.label }}"
+             id="id_{{ field.label }}" {% if field.default %}checked{% endif %}>
+    </div>
+    <hr class="form-field">
     {% endfor %}
 
     <div id="fields"></div>

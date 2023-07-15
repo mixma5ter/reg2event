@@ -5,6 +5,17 @@ from core.models import CreatedModel
 
 User = get_user_model()
 
+FIELD_TYPE_CHOICES = [
+    ('text', 'Text'),
+    ('textarea', 'Textarea'),
+    ('number', 'Number'),
+    ('email', 'Email'),
+    ('phone', 'Phone'),
+    ('checkbox', 'Checkbox'),
+    ('radio', 'Radio'),
+    ('select', 'Select'),
+]
+
 
 def getUser():
     """Callable function."""
@@ -64,16 +75,6 @@ class Form(CreatedModel):
 class Field(CreatedModel):
     """Модель поля формы регистрации."""
 
-    FIELD_TYPE_CHOICES = [
-        ('text', 'Text'),
-        ('textarea', 'Textarea'),
-        ('number', 'Number'),
-        ('email', 'Email'),
-        ('phone', 'Phone'),
-        ('checkbox', 'Checkbox'),
-        ('radio', 'Radio'),
-        ('select', 'Select'),
-    ]
     label = models.CharField(
         max_length=255,
         verbose_name='Название поля',
@@ -83,7 +84,7 @@ class Field(CreatedModel):
         max_length=255,
         choices=FIELD_TYPE_CHOICES,
         verbose_name='Тип поля',
-        help_text='Выберите название поля'
+        help_text='Выберите тип поля'
     )
     form = models.ForeignKey(
         Form,
@@ -132,3 +133,38 @@ class FieldChoice(CreatedModel):
 
     def __str__(self):
         return self.choice_text
+
+
+class BasicField(CreatedModel):
+    """Модель базового поля."""
+
+    label = models.CharField(
+        max_length=255,
+        verbose_name='Название поля',
+        help_text='Введите название поля'
+    )
+    field_type = models.CharField(
+        max_length=255,
+        choices=FIELD_TYPE_CHOICES,
+        verbose_name='Тип поля',
+        help_text='Выберите тип поля'
+    )
+    order_id = models.IntegerField(
+        verbose_name='Порядковый номер',
+        help_text='Введите порядковый номер'
+    )
+    visible = models.BooleanField(
+        verbose_name='Видимое'
+    )
+    default = models.BooleanField(
+        default=False,
+        verbose_name='Включено по умолчанию'
+    )
+
+    class Meta:
+        ordering = ('-pub_date',)
+        verbose_name = 'Базовое поле'
+        verbose_name_plural = 'Базовые поля'
+
+    def __str__(self):
+        return self.label

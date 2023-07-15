@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Form, Field, FieldChoice
+from .models import BasicField, Form, Field, FieldChoice
 
 
 @admin.register(Form)
@@ -65,3 +65,25 @@ class FieldChoiceAdmin(admin.ModelAdmin):
     )
     list_display_links = ('choice_text',)
     search_fields = ('field', 'choice_text',)
+
+
+@admin.register(BasicField)
+class BasicFieldAdmin(admin.ModelAdmin):
+    """Регистрация модели поля формы в админке."""
+
+    save_on_top = True
+    list_select_related = True
+    empty_value_display = '-пусто-'
+    list_display = (
+        'pk',
+        'label',
+        'field_type',
+        'order_id',
+        'visible',
+        'default',
+        'pub_date',
+        'update_date',
+    )
+    list_display_links = ('label', 'order_id',)
+    search_fields = ('label',)
+    list_filter = ('visible',)

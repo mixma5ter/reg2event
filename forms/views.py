@@ -8,19 +8,9 @@ from config.settings import DOMAIN_NAME
 from core.bitrix import check_deal, create_list, create_field, delete_list, delete_field
 from core.paginator import paginator
 from .forms import FormCreateForm, FormUpdateForm
-from .models import Form, Field
+from .models import BasicField, Form, Field
 
 CARDS_ON_INDEX_PAGE = 6
-BASIC_FIELDS = [
-    {'Фамилия': 'text'},
-    {'Имя': 'text'},
-    {'Отчество': 'text'},
-    {'Организация': 'text'},
-    {'Должность': 'text'},
-    {'Почта': 'email'},
-    {'Телефон': 'phone'},
-    {'Комментарий': 'textarea'}
-]
 
 
 class IndexView(LoginRequiredMixin, ListView):
@@ -68,10 +58,12 @@ class FormCreateView(LoginRequiredMixin, CreateView):
     context_object_name = 'form'
     title = 'Новая форма регистрации'
 
+    basic_fields = BasicField.objects.filter(visible=True).order_by('order_id')
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = self.title
-        context['basic_fields'] = BASIC_FIELDS
+        context['basic_fields'] = self.basic_fields
         return context
 
     def form_valid(self, form):
@@ -98,8 +90,10 @@ class FormCreateView(LoginRequiredMixin, CreateView):
         create_list(deal_id, form.instance.deal_title)
 
         # Создаем базовые поля
-        fields = [Field(label=label, field_type=field_type, form_id=form_id, is_active=False) for
-                  field_data in BASIC_FIELDS for label, field_type in field_data.items()]
+        fields = [Field(label=item.label,
+                        field_type=item.field_type,
+                        form_id=form_id,
+                        is_active=False) for item in self.basic_fields]
         Field.objects.bulk_create(fields)
 
         # Получаем поля формы Field из POST-запроса и сохраняем их в БД
