@@ -58,12 +58,10 @@ class FormCreateView(LoginRequiredMixin, CreateView):
     context_object_name = 'form'
     title = 'Новая форма регистрации'
 
-    basic_fields = BasicField.objects.filter(visible=True).order_by('order_id')
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = self.title
-        context['basic_fields'] = self.basic_fields
+        context['basic_fields'] = BasicField.objects.filter(visible=True).order_by('order_id')
         return context
 
     def form_valid(self, form):
@@ -90,10 +88,11 @@ class FormCreateView(LoginRequiredMixin, CreateView):
         create_list(deal_id, form.instance.deal_title)
 
         # Создаем базовые поля
+        basic_fields = BasicField.objects.filter(visible=True).order_by('order_id')
         fields = [Field(label=item.label,
                         field_type=item.field_type,
                         form_id=form_id,
-                        is_active=False) for item in self.basic_fields]
+                        is_active=False) for item in basic_fields]
         Field.objects.bulk_create(fields)
 
         # Получаем поля формы Field из POST-запроса и сохраняем их в БД

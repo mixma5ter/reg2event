@@ -77,13 +77,15 @@ class BasicFieldAdmin(admin.ModelAdmin):
     list_display = (
         'pk',
         'label',
+        'visible',
         'field_type',
         'order_id',
-        'visible',
         'default',
         'pub_date',
         'update_date',
     )
-    list_display_links = ('label', 'order_id',)
+    list_display_links = ('label',)
+    list_editable = ('order_id', 'visible', 'default',)
     search_fields = ('label',)
     list_filter = ('visible',)
+    ordering = ('order_id',)
