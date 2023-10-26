@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     let count = 0;
-    let maxFields = 2;
+    let maxFields = 20;
     let addFieldButton = document.getElementById('add-field');
     let fieldsContainer = document.getElementById('fields');
 
