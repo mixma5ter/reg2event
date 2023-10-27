@@ -69,7 +69,8 @@ class Form(CreatedModel):
         verbose_name_plural = 'Формы регистрации'
 
     def __str__(self):
-        return self.title
+        res = f'{self.deal_id} - {self.title}'
+        return res
 
 
 class Field(CreatedModel):
@@ -111,7 +112,8 @@ class Field(CreatedModel):
         verbose_name_plural = 'Поля формы'
 
     def __str__(self):
-        return self.label
+        res = f'{self.form.deal_id} - {self.label}'
+        return res
 
 
 class FieldChoice(CreatedModel):

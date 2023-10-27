@@ -75,7 +75,8 @@ a:hover {
   padding: 5px;
 }
 
-.remove-field-btn {
+.remove-field-btn,
+.add-list-item-btn {
   height: 40px;
 }
 
@@ -210,6 +211,10 @@ a:hover {
   border-radius: 3px;
 }
 
+.custom-select {
+  appearance: auto;
+}
+
 .form-field textarea {
   height: 10rem;
   border: 2px solid #ccc;
@@ -255,6 +260,24 @@ input[type="number"]::-webkit-outer-spin-button {
 input:focus {
   outline: none;
   border: 2px solid grey;
+}
+
+.list-item {
+  position: relative;
+}
+
+.list-item input {
+  padding-right: 40px; /* добавить отступ справа, чтобы текст не накладывался на кнопку */
+}
+
+.remove-list-item-btn {
+  position: absolute; /* позволяет кнопке переместиться в любую точку внутри родителя list-item */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 40px; /* ширина кнопки */
+  height: 40px; /* высота кнопки */
+  text-align: center;
 }
 
 .loader {

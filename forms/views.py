@@ -8,7 +8,7 @@ from config.settings import DOMAIN_NAME
 from core.bitrix import check_deal, create_list, create_field, delete_list, delete_field
 from core.paginator import paginator
 from .forms import FormCreateForm, FormUpdateForm
-from .models import BasicField, Form, Field
+from .models import BasicField, Form, Field, FieldChoice
 
 CARDS_ON_INDEX_PAGE = 6
 
@@ -127,6 +127,13 @@ class FormCreateView(LoginRequiredMixin, CreateView):
                     field.bitrix_id = result
                     # Сохраняем поле в БД
                     field.save()
+
+                    # Сохраняем элементы выбора в модель FieldChoice
+                    if field_type == 'select':
+                        choices = self.request.POST.getlist(f'custom-{field_num}-list_item')
+                        field_choices = [FieldChoice(field=field,
+                                                     choice_text=choice) for choice in choices]
+                        FieldChoice.objects.bulk_create(field_choices)
 
         messages.success(self.request, 'Форма успешно создана!')
         return super().form_valid(form)
