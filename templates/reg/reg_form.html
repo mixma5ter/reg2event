@@ -19,7 +19,9 @@
     {% csrf_token %}
     {% for field in form %}
     <div class="form-field">
+      {% if field.field.widget.get_class_name != 'SeparatorWidget' %}
       <label for="{{ field.name }}">{{ field.name }}</label>
+      {% endif %}
       {% if field.field.widget.input_type == 'checkbox' %}
       <div class="form-field-checkbox">
         {{ field }}

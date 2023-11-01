@@ -14,6 +14,7 @@ FIELD_TYPE_CHOICES = [
     ('checkbox', 'Checkbox'),
     ('radio', 'Radio'),
     ('select', 'Select'),
+    ('separator', 'Separator'),
 ]
 
 

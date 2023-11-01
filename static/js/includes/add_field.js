@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <option value="phone">Телефон</option>
                         <option value="checkbox">Чекбокс</option>
                         <option value="select">Список</option>
+                        <option value="separator">Разделитель</option>
                     </select>
                     <div class="list-container"></div>
                     <button class="btn mb-4 add-list-item-btn" style="display: none;">Добавить элемент</button>

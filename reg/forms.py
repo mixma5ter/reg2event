@@ -1,8 +1,20 @@
 from django import forms
 from django.forms import CheckboxInput, EmailInput, Select, Textarea, TextInput
 from django.shortcuts import get_object_or_404
+from django.utils.safestring import mark_safe
 
 from forms.models import Form, FieldChoice
+
+
+class SeparatorWidget(forms.Widget):
+    def render(self, name, value, attrs=None, renderer=None):
+        return mark_safe(f"<hr><strong>{name}</strong>")
+
+    def value_from_datadict(self, data, files, name):
+        return None
+
+    def get_class_name(self):
+        return self.__class__.__name__
 
 
 class CustomTextarea(forms.CharField):
@@ -58,3 +70,7 @@ class RegForm(forms.Form):
                     choices=choice_list,
                     initial='',  # Устанавливаем начальное значение в пустую строку
                     widget=Select(attrs={'class': 'form-control custom-select'}))
+            elif field.field_type == 'separator':
+                self.fields[field.label] = forms.CharField(
+                    required=False,
+                    widget=SeparatorWidget(attrs={'class': 'form-control', 'readonly': True}))
