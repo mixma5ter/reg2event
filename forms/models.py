@@ -15,6 +15,9 @@ FIELD_TYPE_CHOICES = [
     ('radio', 'Radio'),
     ('select', 'Select'),
     ('separator', 'Separator'),
+    # дополнительные поля для автозаполнения
+    ('date', 'Date'),
+    ('time', 'Time'),
 ]
 
 

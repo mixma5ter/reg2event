@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -53,6 +55,9 @@ class RegView(View):
 
             fields = {'NAME': form.title}
 
+            # текущее время сервера
+            current_datetime = datetime.now()
+
             for field in form.fields.all():
                 key = field.bitrix_id
                 value = request.POST.get(field.label)
@@ -62,6 +67,12 @@ class RegView(View):
                         value = 'да'
                     else:
                         value = 'нет'
+                elif field.field_type == 'date':
+                    # дата в формате YYYY-MM-DD
+                    value = current_datetime.date().isoformat()
+                elif field.field_type == 'time':
+                    # время в формате HH:MM
+                    value = current_datetime.time().isoformat(timespec='minutes')
                 if value:
                     fields[key] = value
 

@@ -93,6 +93,15 @@ class FormCreateView(LoginRequiredMixin, CreateView):
                         field_type=item.field_type,
                         form_id=form_id,
                         is_active=False) for item in basic_fields]
+
+        # Создаем дополнительные поля для даты и времени
+        fields.extend([
+            Field(label='Дата', field_type='date', form_id=form_id, is_active=True,
+                  bitrix_id=create_field(deal_id, 'Дата')),
+            Field(label='Время', field_type='time', form_id=form_id, is_active=True,
+                  bitrix_id=create_field(deal_id, 'Время'))
+        ])
+
         Field.objects.bulk_create(fields)
 
         # Получаем поля формы Field из POST-запроса и сохраняем их в БД
