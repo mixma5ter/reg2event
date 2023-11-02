@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% load user_filters %}
+
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
@@ -57,6 +59,7 @@
     <hr class="form-field">
 
     {% for field in fields %}
+    {% if field.field_type|not_in:'date,time' %}
     <div class="form-field form-field-checkbox">
       <label for="id_{{ field.label }}">{{ field.label }}:</label>
       <input class="form-check-input" type="checkbox"
@@ -64,6 +67,7 @@
              {% if field.is_active %} checked {% endif %}>
     </div>
     <hr class="form-field">
+    {% endif %}
     {% endfor %}
 
     <button type="submit" class="col-4 me-4 mb-4 btn btn-danger btn-lg" name="delete"
