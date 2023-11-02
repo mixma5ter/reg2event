@@ -1,6 +1,24 @@
 from django.contrib import admin
 
-from .models import BasicField, Form, Field, FieldChoice
+from .models import BasicField, Group, Form, Field, FieldChoice
+
+
+@admin.register(Group)
+class GroupAdmin(admin.ModelAdmin):
+    """Регистрация модели группы для формы в админке."""
+
+    save_on_top = True
+    list_select_related = True
+    empty_value_display = '-пусто-'
+    list_display = (
+        'pk',
+        'name',
+        'pub_date',
+        'update_date',
+    )
+    list_display_links = ('name',)
+    search_fields = ('name',)
+    list_filter = ('name',)
 
 
 @admin.register(Form)
@@ -15,6 +33,7 @@ class FormAdmin(admin.ModelAdmin):
         'deal_id',
         'author',
         'title',
+        'group',
         'deal_title',
         'form_link',
         'stream_link',
@@ -24,7 +43,7 @@ class FormAdmin(admin.ModelAdmin):
     )
     list_display_links = ('deal_id', 'title',)
     search_fields = ('deal_id', 'title',)
-    list_filter = ('author',)
+    list_filter = ('author', 'group',)
 
 
 @admin.register(Field)

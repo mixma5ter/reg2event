@@ -26,6 +26,24 @@ def getUser():
     return User.objects.get_or_create(username=User)
 
 
+class Group(CreatedModel):
+    """Модель группы форм регистрации."""
+
+    name = models.CharField(
+        max_length=255,
+        verbose_name='Название группы',
+    )
+
+    class Meta:
+        ordering = ('-pub_date',)
+        verbose_name = 'Группа'
+        verbose_name_plural = 'Группы'
+
+    def __str__(self):
+        res = self.name
+        return res
+
+
 class Form(CreatedModel):
     """Модель формы регистрации на мероприятие."""
 
@@ -50,6 +68,14 @@ class Form(CreatedModel):
         max_length=255,
         verbose_name='Название формы',
         help_text='Введите название формы',
+    )
+    group = models.ForeignKey(
+        Group,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name='Группа',
+        help_text='Выберете группу',
     )
     end_date = models.DateTimeField(
         verbose_name='Дата окончания регистрации',
@@ -135,7 +161,7 @@ class FieldChoice(CreatedModel):
     class Meta:
         ordering = ('-pub_date',)
         verbose_name = 'Поле выбора'
-        verbose_name_plural = 'Поля выбора'
+        verbose_name_plural = 'Поле выбора'
 
     def __str__(self):
         return self.choice_text

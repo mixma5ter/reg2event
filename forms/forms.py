@@ -51,14 +51,16 @@ class BaseFormMixin(forms.ModelForm):
 
     class Meta:
         model = Form
-        fields = ('title', 'stream_link', 'end_date',)
+        fields = ('title', 'group', 'stream_link', 'end_date',)
         help_texts = {
             'title': 'Введите название мероприятия',
+            'group': 'Выберете название группы',
             'stream_link': 'Добавьте ссылку на трансляцию',
             'end_date': 'Укажите дату окончания регистрации',
         }
         labels = {
             'title': 'Название формы',
+            'group': 'Название группы',
             'stream_link': 'Ссылка на трансляцию',
             'end_date': 'Дата окончания регистрации',
         }
