@@ -61,7 +61,7 @@ class RegForm(forms.Form):
                     required=False,
                     widget=CheckboxInput(attrs={'class': 'form-check-input'}))
             elif field.field_type == 'select':
-                choices = FieldChoice.objects.filter(field=field)
+                choices = FieldChoice.objects.filter(field=field).order_by('id')
                 # Добавляем пустой вариант в качестве параметра по умолчанию или заполнителя
                 choice_list = [('', '---')]
                 # Добавляем оставшиеся варианты из базы данных
