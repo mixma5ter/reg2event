@@ -229,10 +229,6 @@ a:hover {
   background-color: #dc6326;
 }
 
-.form-field select {
-  width: 12.5rem;
-}
-
 .form-field input[type="checkbox"] {
   width: 2.5rem;
   box-shadow: none !important;
