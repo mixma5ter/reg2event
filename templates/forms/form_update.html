@@ -70,6 +70,12 @@
     {% endif %}
     {% endfor %}
 
+    <div id="fields"></div>
+    <button type="button" class="col-4 me-4 mb-4 btn btn-lg btn-outline-primary" id="add-field">
+      Добавить
+      поле
+    </button>
+
     <button type="submit" class="col-4 me-4 mb-4 btn btn-danger btn-lg" name="delete"
             id="delete-button">
       Удалить форму
@@ -78,6 +84,7 @@
   </form>
 </div>
 
+<script type="text/javascript" src="{% static 'js/includes/add_field.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/includes/copy_link.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/includes/form_delete.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/includes/form_loader.js' %}"></script>

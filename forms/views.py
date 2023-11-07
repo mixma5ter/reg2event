@@ -173,6 +173,8 @@ class FormUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         """Переопределяем метод формы для сохранения изменений связанных полей поля формы."""
 
+        deal_id = self.object.deal_id
+        form_id = form.instance.id
         # Получаем список всех полей формы
         fields = self.object.fields.all()
 
@@ -188,6 +190,34 @@ class FormUpdateView(LoginRequiredMixin, UpdateView):
             else:
                 delete_field(self.object.deal_id, field.bitrix_id)
             field.save()
+
+        # Получаем поля формы Field из POST-запроса и сохраняем их в БД
+        for key, value in self.request.POST.items():
+            # Получаем кастомные поля
+            if key.startswith('custom_field-'):
+                field_data = key.split('-')
+                if field_data[1].isdigit():
+                    field_num = int(field_data[1])
+                    label = self.request.POST.get(f'custom_field-{field_num}-label')
+                    field_type = self.request.POST.get(f'custom-{field_num}-field_type')
+                    field = Field.objects.create(
+                        form_id=form_id,
+                        label=label,
+                        field_type=field_type,
+                        is_active=True,
+                    )
+                    # Сохраняем поле в Битрикс
+                    result = create_field(deal_id, field.label)
+                    field.bitrix_id = result
+                    # Сохраняем поле в БД
+                    field.save()
+
+                    # Сохраняем элементы выбора в модель FieldChoice
+                    if field_type == 'select':
+                        choices = self.request.POST.getlist(f'custom-{field_num}-list_item')
+                        field_choices = [FieldChoice(field=field,
+                                                     choice_text=choice) for choice in choices]
+                        FieldChoice.objects.bulk_create(field_choices)
 
         messages.success(self.request, 'Форма успешно обновлена!')
         return super().form_valid(form)
