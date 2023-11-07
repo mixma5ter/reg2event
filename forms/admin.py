@@ -55,6 +55,7 @@ class FieldAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
     list_display = (
         'pk',
+        'order_id',
         'label',
         'field_type',
         'form',
@@ -64,8 +65,10 @@ class FieldAdmin(admin.ModelAdmin):
         'update_date',
     )
     list_display_links = ('label',)
+    list_editable = ('order_id',)
     search_fields = ('label', 'form',)
     list_filter = ('form',)
+    ordering = ('order_id',)
 
 
 @admin.register(FieldChoice)
@@ -95,10 +98,10 @@ class BasicFieldAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
     list_display = (
         'pk',
+        'order_id',
         'label',
         'visible',
         'field_type',
-        'order_id',
         'default',
         'pub_date',
         'update_date',

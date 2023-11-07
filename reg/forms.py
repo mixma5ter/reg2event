@@ -34,7 +34,7 @@ class RegForm(forms.Form):
     def __init__(self, *args, deal_id, **kwargs):
         super().__init__(*args, **kwargs)
         reg_form = get_object_or_404(Form, deal_id=deal_id)
-        active_fields = reg_form.fields.filter(is_active=True).order_by('pk')
+        active_fields = reg_form.fields.filter(is_active=True).order_by('order_id')
         for field in active_fields:
             if field.field_type == 'text':
                 self.fields[field.label] = forms.CharField(

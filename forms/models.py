@@ -117,6 +117,10 @@ class Field(CreatedModel):
         verbose_name='Тип поля',
         help_text='Выберите тип поля'
     )
+    order_id = models.IntegerField(
+        verbose_name='Порядковый номер',
+        help_text='Введите порядковый номер'
+    )
     form = models.ForeignKey(
         Form,
         on_delete=models.CASCADE,
@@ -137,7 +141,7 @@ class Field(CreatedModel):
     )
 
     class Meta:
-        ordering = ('-pub_date',)
+        ordering = ('-order_id',)
         verbose_name = 'Поле формы'
         verbose_name_plural = 'Поля формы'
 
@@ -194,7 +198,7 @@ class BasicField(CreatedModel):
     )
 
     class Meta:
-        ordering = ('-pub_date',)
+        ordering = ('-order_id',)
         verbose_name = 'Базовое поле'
         verbose_name_plural = 'Базовые поля'
 
