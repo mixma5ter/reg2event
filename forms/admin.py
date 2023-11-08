@@ -59,13 +59,14 @@ class FieldAdmin(admin.ModelAdmin):
         'label',
         'field_type',
         'form',
+        'is_required',
         'is_active',
         'bitrix_id',
         'pub_date',
         'update_date',
     )
     list_display_links = ('label',)
-    list_editable = ('order_id',)
+    list_editable = ('order_id', 'is_required',)
     search_fields = ('label', 'form',)
     list_filter = ('form',)
     ordering = ('order_id',)
@@ -100,6 +101,7 @@ class BasicFieldAdmin(admin.ModelAdmin):
         'pk',
         'order_id',
         'label',
+        'is_required',
         'visible',
         'field_type',
         'default',
@@ -107,7 +109,7 @@ class BasicFieldAdmin(admin.ModelAdmin):
         'update_date',
     )
     list_display_links = ('label',)
-    list_editable = ('order_id', 'visible', 'default',)
+    list_editable = ('order_id', 'visible', 'default', 'is_required',)
     search_fields = ('label',)
     list_filter = ('visible',)
     ordering = ('order_id',)

@@ -128,6 +128,10 @@ class Field(CreatedModel):
         verbose_name='Форма',
         help_text='Выберите форму'
     )
+    is_required = models.BooleanField(
+        default=True,
+        verbose_name='Обязательное к заполнению'
+    )
     is_active = models.BooleanField(
         default=None,
         verbose_name='Добавить поле в форму',
@@ -188,6 +192,10 @@ class BasicField(CreatedModel):
     order_id = models.IntegerField(
         verbose_name='Порядковый номер',
         help_text='Введите порядковый номер'
+    )
+    is_required = models.BooleanField(
+        default=True,
+        verbose_name='Обязательное к заполнению'
     )
     visible = models.BooleanField(
         verbose_name='Видимое'

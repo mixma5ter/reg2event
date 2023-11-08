@@ -36,29 +36,34 @@ class RegForm(forms.Form):
         reg_form = get_object_or_404(Form, deal_id=deal_id)
         active_fields = reg_form.fields.filter(is_active=True).order_by('order_id')
         for field in active_fields:
+            required = field.is_required
             if field.field_type == 'text':
                 self.fields[field.label] = forms.CharField(
                     max_length=100,
+                    required=required,
                     widget=TextInput(attrs={'class': 'form-control'}))
             elif field.field_type == 'textarea':
-                self.fields[field.label] = CustomTextarea(
+                self.fields[field.label] = forms.CharField(
                     max_length=955,
-                    required=False,
+                    required=required,
                     widget=Textarea(attrs={'class': 'form-control'}))
             elif field.field_type == 'number':
                 self.fields[field.label] = forms.IntegerField(
+                    required=required,
                     widget=TextInput(attrs={'class': 'form-control'}))
             elif field.field_type == 'email':
                 self.fields[field.label] = forms.EmailField(
                     max_length=100,
+                    required=required,
                     widget=EmailInput(attrs={'class': 'form-control'}))
             elif field.field_type == 'phone':
                 self.fields[field.label] = forms.CharField(
                     max_length=14,
+                    required=required,
                     widget=TextInput(attrs={'class': 'form-control'}))
             elif field.field_type == 'checkbox':
                 self.fields[field.label] = forms.BooleanField(
-                    required=False,
+                    required=required,
                     widget=CheckboxInput(attrs={'class': 'form-check-input'}))
             elif field.field_type == 'select':
                 choices = FieldChoice.objects.filter(field=field).order_by('id')
@@ -68,6 +73,7 @@ class RegForm(forms.Form):
                 choice_list += [(choice.choice_text, choice.choice_text) for choice in choices]
                 self.fields[field.label] = forms.ChoiceField(
                     choices=choice_list,
+                    required=required,
                     initial='',  # Устанавливаем начальное значение в пустую строку
                     widget=Select(attrs={'class': 'form-control custom-select'}))
             elif field.field_type == 'separator':
