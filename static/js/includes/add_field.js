@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     let count = 0;
-    let maxFields = 100;
+    let maxFields = 500;
     let fieldsContainer = document.getElementById('fields');
 
     fieldsContainer.addEventListener('click', function (event) {

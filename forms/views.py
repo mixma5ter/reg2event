@@ -190,6 +190,8 @@ class FormUpdateView(LoginRequiredMixin, UpdateView):
         # Обработка базовых полей
         for field in fields:
             field_id = 'field-{}-{}'.format(field.field_type, field.id)
+            if field.field_type in ['time', 'date']:
+                continue
             field.is_active = field_id in self.request.POST
             if field.is_active:
                 result = create_field(self.object.deal_id, field.label)
