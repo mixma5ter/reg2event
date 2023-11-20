@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import CheckboxInput, EmailInput, Select, Textarea, TextInput
+from django.forms import CheckboxInput, EmailInput, Select, Textarea, TextInput, RadioSelect
 from django.shortcuts import get_object_or_404
 from django.utils.safestring import mark_safe
 
@@ -67,15 +67,14 @@ class RegForm(forms.Form):
                     widget=CheckboxInput(attrs={'class': 'form-check-input'}))
             elif field.field_type == 'select':
                 choices = FieldChoice.objects.filter(field=field).order_by('id')
-                # Добавляем пустой вариант в качестве параметра по умолчанию или заполнителя
-                choice_list = [('', '---')]
-                # Добавляем оставшиеся варианты из базы данных
-                choice_list += [(choice.choice_text, choice.choice_text) for choice in choices]
+                # Создаём список вариантов из базы данных
+                choice_list = [(choice.choice_text, choice.choice_text) for choice in choices]
                 self.fields[field.label] = forms.ChoiceField(
                     choices=choice_list,
                     required=required,
-                    initial='',  # Устанавливаем начальное значение в пустую строку
-                    widget=Select(attrs={'class': 'form-control custom-select'}))
+                    initial=None,  # Устанавливаем начальное значение в None
+                    widget=RadioSelect(attrs={'class': 'form-check-input'}))
+                # widget = Select(attrs={'class': 'form-control custom-select'}))
             elif field.field_type == 'separator':
                 self.fields[field.label] = forms.CharField(
                     required=False,
