@@ -74,6 +74,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 # Подключаем контекст-процессор вывода текущего года
                 'core.context_processors.year.year',
+                # Подключаем контекст-процессор получения версии файла style.css
+                'core.context_processors.style.version',
             ],
         },
     },

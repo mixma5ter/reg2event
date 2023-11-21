@@ -6,7 +6,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=1.0.1" type="text/css"/>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v={{ STATIC_VERSION }}"
+        type="text/css"/>
   <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}"/>
   <script type="text/javascript" src="{% static 'js/alert_message.js' %}"></script>
   <title>{% block title %}...{% endblock %}</title>
