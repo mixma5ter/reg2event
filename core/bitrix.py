@@ -137,12 +137,3 @@ def create_element(event, fields):
         'FIELDS': fields
     }
     return requests.post(url, json=params)
-
-# deal_id = 15686  # ID сделки, которую нужно обновить
-# field_id = 'UF_CRM_1698835985'  # ID пользовательского поля
-# value = 'utp.mcko.ru/events/forms/30/'  # Значение, которое требуется присвоить полю
-# update_result = update_deal_field(deal_id, field_id, value)
-# if update_result.get('error'):
-#     print(f"Произошла ошибка при обновлении сделки: {update_result['error_description']}")
-# else:
-#     print(f"Сделка {deal_id} успешно обновлена.")
