@@ -4,8 +4,10 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, UpdateView
 
-from config.settings import DOMAIN_NAME
-from core.bitrix import check_deal, create_list, create_field, delete_list, delete_field
+from config.settings import DOMAIN_NAME, LINK_FIELD
+from core.bitrix import (check_deal, create_list, create_field,
+                         delete_list, delete_field, update_deal_field,
+                         LIST_TEMPLATE)
 from core.paginator import paginator
 from .forms import FormCreateForm, FormUpdateForm
 from .models import BasicField, Form, Field, FieldChoice
@@ -86,7 +88,7 @@ class FormCreateView(LoginRequiredMixin, CreateView):
         form_id = form.instance.id
 
         # Создаем список в Битрикс
-        create_list(deal_id, form.instance.deal_title)
+        list_id = create_list(deal_id, form.instance.deal_title)
 
         # Создаем базовые поля
         basic_fields = BasicField.objects.filter(visible=True).order_by('order_id')
@@ -159,6 +161,9 @@ class FormCreateView(LoginRequiredMixin, CreateView):
                         field_choices = [FieldChoice(field=field,
                                                      choice_text=choice) for choice in choices]
                         FieldChoice.objects.bulk_create(field_choices)
+
+        # Обновление ссылки на список в сделке Битрикс24
+        update_deal_field(deal_id, LINK_FIELD, LIST_TEMPLATE.format(list_id))
 
         messages.success(self.request, 'Форма успешно создана!')
         return super().form_valid(form)

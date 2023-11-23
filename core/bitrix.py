@@ -8,6 +8,8 @@ from config.settings import WEB_HOOK
 IBLOCK_TYPE_ID = 'lists_socnet'
 IBLOCK_CODE = 'registration_{}'  # код информационного блока
 SOCNET_GROUP_ID = 16
+LIST_TEMPLATE = 'mcko.bitrix24.ru/workgroups/group/{}/lists/{}/view/0/'.format(SOCNET_GROUP_ID,
+                                                                               '{}')
 
 
 def request(command, event_id, fields):
@@ -52,6 +54,22 @@ def check_deal(deal_id):
         'errors': data.get('error'),
     }
     return result
+
+
+def update_deal_field(deal_id, field_id, value):
+    """Обновление поля сделки в Битрикс24."""
+
+    url = WEB_HOOK + 'crm.deal.update'
+    # Формирование данных для запроса
+    update_data = {
+        'ID': deal_id,
+        'fields': {
+            field_id: value
+        }
+    }
+    # Выполнение запроса к API на обновление сделки
+    response = requests.post(url, json=update_data)
+    return response.json()
 
 
 def create_list(event, name):
@@ -119,3 +137,12 @@ def create_element(event, fields):
         'FIELDS': fields
     }
     return requests.post(url, json=params)
+
+# deal_id = 15686  # ID сделки, которую нужно обновить
+# field_id = 'UF_CRM_1698835985'  # ID пользовательского поля
+# value = 'utp.mcko.ru/events/forms/30/'  # Значение, которое требуется присвоить полю
+# update_result = update_deal_field(deal_id, field_id, value)
+# if update_result.get('error'):
+#     print(f"Произошла ошибка при обновлении сделки: {update_result['error_description']}")
+# else:
+#     print(f"Сделка {deal_id} успешно обновлена.")

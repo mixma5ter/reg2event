@@ -28,6 +28,7 @@ ALLOWED_HOSTS = [
     'localhost'
 ]
 WEB_HOOK = os.getenv('BITRIX_WEB_HOOK')
+LINK_FIELD = os.getenv('BITRIX_LINK_FIELD')
 
 # Application definition
 
