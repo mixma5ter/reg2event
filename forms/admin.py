@@ -37,6 +37,7 @@ class FormAdmin(admin.ModelAdmin):
         'deal_title',
         'form_link',
         'stream_link',
+        'telegram_channel_id',
         'end_date',
         'pub_date',
         'update_date',

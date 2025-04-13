@@ -9,6 +9,7 @@ from django.views.decorators.http import require_http_methods
 from core.bitrix import create_element
 from forms.models import Form
 from reg.forms import RegForm
+from telegram.models import send_form_data_to_telegram
 
 
 @method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
@@ -77,6 +78,10 @@ class RegView(View):
                     fields[key] = value
 
             create_element(deal_id, fields)
+
+            # Отправка в Telegram после успешной отправки в Битрикс
+            send_form_data_to_telegram(form, request.POST)  # Передаем request.POST
+
             return redirect('reg:reg_info', deal_id=deal_id, slug='success')
 
         title = self.get_form_obj(deal_id).title

@@ -51,17 +51,19 @@ class BaseFormMixin(forms.ModelForm):
 
     class Meta:
         model = Form
-        fields = ('title', 'group', 'stream_link', 'end_date',)
+        fields = ('title', 'group', 'stream_link', 'telegram_channel_id', 'end_date',)
         help_texts = {
             'title': 'Введите название мероприятия',
             'group': 'Выберете название группы',
             'stream_link': 'Добавьте ссылку на трансляцию',
+            'telegram_channel_id': 'Введите ID телеграм чата',
             'end_date': 'Укажите дату окончания регистрации',
         }
         labels = {
             'title': 'Название формы',
             'group': 'Название группы',
             'stream_link': 'Ссылка на трансляцию',
+            'telegram_channel_id': 'ID телеграм чата',
             'end_date': 'Дата окончания регистрации',
         }
 
@@ -69,6 +71,12 @@ class BaseFormMixin(forms.ModelForm):
         required=False,
         label='Ссылка на трансляцию',
         help_text='Введите ссылку на трансляцию',
+    )
+
+    telegram_channel_id = forms.CharField(
+        required=False,
+        label='ID телеграм чата',
+        help_text='Введите ID телеграм чата',
     )
 
     end_date = forms.DateTimeField(

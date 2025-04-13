@@ -92,6 +92,12 @@ class Form(CreatedModel):
         blank=True,
         null=True,
     )
+    telegram_channel_id = models.CharField(
+        max_length=255,
+        verbose_name='ID телеграм чата',
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         ordering = ('-pub_date',)
